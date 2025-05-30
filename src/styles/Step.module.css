@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  gap: 1rem; /* uniforma lo spazio tra i campi */
+  width: 100%;
+  min-height: 480px;
+}
+
+.input {
+  width: 100%;
+  max-width: 400px;
+}

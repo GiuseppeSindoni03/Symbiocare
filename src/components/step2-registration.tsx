@@ -1,0 +1,46 @@
+import { Select, TextInput } from "@mantine/core";
+import { StepProps } from "../types/registration-form";
+import styles from "../styles/Step.module.css";
+
+export default function Step2({ form }: StepProps) {
+  return (
+    <div className={styles.container}>
+      <TextInput
+        className={styles.input}
+        label="Codice Fiscale"
+        {...form.getInputProps("cf")}
+      />
+      <TextInput
+        className={styles.input}
+        label="Data di nascita"
+        mt="sm"
+        type="date"
+        {...form.getInputProps("birthDate")}
+        // placeholder="gg / mm / aaaa"
+        //error={form.errors.orderDate}
+        //valueFormat="DD/MM/YYYY"
+        //placeholder="gg/mm/aaaa"
+      />
+      {/*          
+      <DateInput
+        label="Data di nascita"
+        {...form.getInputProps("birthDate")}
+        valueFormat="DD/MM/YYYY"
+        //hideCalendar
+        //allowFreeInput
+        placeholder="gg/mm/aaaa"
+      /> */}
+      <TextInput
+        label="Telefono"
+        {...form.getInputProps("phone")}
+        className={styles.input}
+      />
+      <Select
+        className={styles.input}
+        label="Genere"
+        data={["Uomo", "Donna", "Altro"]}
+        {...form.getInputProps("gender")}
+      />
+    </div>
+  );
+}
