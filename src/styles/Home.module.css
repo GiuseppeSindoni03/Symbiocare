@@ -1,8 +1,20 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  /* justify-content: flex-start;
+  align-items: center; */
   min-width: 100vh;
   min-height: 100vh;
+}
+
+/* * {
+  border: 1px solid red;
+} */
+
+.mainContent {
+  margin-left: 280px;
+  /* margin-top: 70px; */
+  padding: 24px;
+  flex: 1;
+  min-height: calc(100vh - 70px);
 }

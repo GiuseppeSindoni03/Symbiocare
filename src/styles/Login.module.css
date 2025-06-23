@@ -1,54 +1,276 @@
-.page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.pageContainer {
   min-height: 100vh;
-  background-color: #ffffff;
-}
-
-.main {
-  flex: 1;
+  background: var(--bg-primary);
+  background-image: radial-gradient(
+      circle at 20% 80%,
+      var(--bg-secondary),
+      transparent 50%
+    ),
+    radial-gradient(circle at 80% 20%, var(--accent-gradient), transparent 50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 600px;
-  /* border: 1px solid black; */
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
 }
-.container {
+
+.formInput input {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  z-index: 1;
+}
+
+.glassCard {
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px var(--accent-primary), 0 0 0 1px var(--accent-primary),
+    inset 0 1px 0 var(--border-color);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.pageSubTitle {
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.inputGroup {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 0.5rem;
+}
+
+.formStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Rimuovi il bordo blu e semplifica */
+.inputWrapper {
+  position: relative;
   width: 100%;
-  max-width: 500px;
-  /* border: 1px solid red; */
 }
 
-.title {
+/* Assicurati che gli input occupino tutto lo spazio disponibile */
+.formInput {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Override degli stili Mantine per assicurare full width */
+.formInput .mantine-TextInput-root,
+.formInput .mantine-PasswordInput-root {
+  width: 100%;
+  border: none !important;
+}
+
+.formInput .mantine-TextInput-input,
+.formInput .mantine-PasswordInput-input {
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 0.875rem 1rem 0.875rem 2.75rem;
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px;
+  color: var(--text-primary) !important;
+  font-size: 1rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  height: 50px;
+}
+
+.formInput .mantine-TextInput-input::placeholder,
+.formInput .mantine-PasswordInput-input::placeholder {
+  color: var(--text-muted) !important;
+}
+
+.formInput .mantine-TextInput-input:focus,
+.formInput .mantine-PasswordInput-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-primary);
+  background: var(--bg-tertiary) !important;
+}
+
+.formInput .mantine-TextInput-input:hover:not(:focus),
+.formInput .mantine-PasswordInput-input:hover:not(:focus) {
+  border-color: var(--text-muted) !important;
+  background: var(--bg-tertiary) !important;
+}
+/* 
+.inputError .mantine-TextInput-input,
+.inputError .mantine-PasswordInput-input {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px var(--border-color) !important;
+} */
+
+/* Stili per le icone degli input in tema scuro */
+.inputWrapper .mantine-TextInput-section,
+.inputWrapper .mantine-PasswordInput-section {
+  color: var(--text-muted) !important;
+}
+
+/* Stile per il bottone di toggle della password */
+.inputWrapper .mantine-PasswordInput-visibilityToggle {
+  color: var(--text-muted) !important;
+}
+
+.inputWrapper .mantine-PasswordInput-visibilityToggle:hover {
+  color: var(--text-secondary) !important;
+}
+
+.inputLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+/* .errorMessage {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+} */
+
+.btn {
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+.btnPrimary {
+  background: var(--accent-gradient);
+  color: white;
+  box-shadow: 0 4px 12px var(--border-color);
+}
+
+.btnPrimary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+.btnPrimary:active {
+  transform: translateY(0);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btnSecondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btnSecondary:hover {
+  background: var(--bg-tertiary);
+  border-color: #444444;
+  transform: translateY(-1px);
+}
+
+.btnLink {
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.btnLink:hover {
+  color: var(--accent-secondary);
+}
+
+.navSection {
   text-align: center;
-  font-weight: 400;
-  color: black;
-  font-family: var(--font-family);
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
 }
 
-.button {
-  min-width: 150px;
-  margin: 0 auto;
-  background-color: var(--primary-color);
+.navText {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
 }
 
-.input {
-  font-size: 16px;
-  padding-top: 8px;
-  min-width: 150px;
-  transition: border-color 0.2s ease;
-}
+/* Responsive design */
+@media (max-width: 480px) {
+  .glassCard {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
 
-@media screen and (max-width: 1024px) {
-  .main {
-    min-width: 100%;
+  .pageTitle {
+    font-size: 1.75rem;
+  }
+
+  .inputWrapper .mantine-TextInput-input,
+  .inputWrapper .mantine-PasswordInput-input {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.25rem;
   }
 }
 
-/* * {
-  border: 1px solid red;
-} */
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+.btn:focus-visible,
+.inputWrapper .mantine-TextInput-input:focus-visible,
+.inputWrapper .mantine-PasswordInput-input:focus-visible,
+.btnLink:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}

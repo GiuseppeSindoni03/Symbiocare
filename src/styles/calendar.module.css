@@ -1,0 +1,3 @@
+.calendaContainer {
+  height: calc(100vh - 60px); /* se vuoi escludere NavBar */
+}

@@ -1,77 +1,110 @@
-import { MantineReactTable, MRT_ColumnDef } from "mantine-react-table";
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+  ColumnDef,
+} from "@tanstack/react-table";
 import { usePatients } from "../hooks/use-patients";
 import { PatientItem } from "../types/patient.interface";
-import { Group, Menu } from "@mantine/core";
-import { Box } from "@mantine/core";
-import { IconUser } from "@tabler/icons-react";
+import {
+  Table,
+  Box,
+  Loader,
+  Menu,
+  ActionIcon,
+  Group,
+  Tooltip,
+} from "@mantine/core";
+import { IconUser, IconDots } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
 export default function PatientsTable() {
   const { data, isLoading } = usePatients();
   const navigate = useNavigate();
 
-  const columns: MRT_ColumnDef<PatientItem>[] = [
+  const columns: ColumnDef<PatientItem>[] = [
     {
+      header: "Codice Fiscale",
       accessorKey: "user.cf",
-      header: "Codice fiscale",
     },
     {
-      accessorKey: "user.name",
       header: "Nome",
+      accessorKey: "user.name",
     },
     {
-      accessorKey: "user.surname",
       header: "Cognome",
+      accessorKey: "user.surname",
     },
     {
-      accessorKey: "user.email",
       header: "Email",
+      accessorKey: "user.email",
     },
     {
-      accessorKey: "user.birthDate",
       header: "Data di nascita",
+      accessorKey: "user.birthDate",
+    },
+    {
+      id: "actions",
+      header: "",
+      cell: ({ row }) => (
+        <Menu shadow="md" width={150}>
+          <Menu.Target>
+            <ActionIcon variant="subtle" color="gray">
+              <IconDots size={16} />
+            </ActionIcon>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Item
+              onClick={() => navigate(`/patients/${row.original.id}`)}
+              leftSection={<IconUser size={14} />}
+            >
+              Visualizza profilo
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+      ),
     },
   ];
 
+  const table = useReactTable({
+    data: data ?? [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   return (
     <Box w="100%" h="100%">
-      <MantineReactTable
-        enableColumnActions={false}
-        enableColumnFilters={false}
-        enableSorting={false}
-        columns={columns}
-        data={data ?? []}
-        state={{ isLoading }}
-        enableRowActions
-        renderRowActionMenuItems={({ row }) => [
-          <Menu.Item
-            key="view"
-            onClick={() => {
-              console.info(row.original.id);
-              const id = row.original.id;
-              console.log("Row.orginal: ", row.original);
-              console.log("Id paziente tabella: ", id);
-              navigate(`/patients/${id}`);
-            }}
-          >
-            <Group>
-              <IconUser size={16} />
-              View Profile
-            </Group>
-          </Menu.Item>,
-          // <Menu.Item
-          //   key="remove"
-          //   onClick={() => {
-          //     console.info("Remove", row.original);
-          //   }}
-          // >
-          //   <Group>
-          //     <IconTrash size={16} />
-          //     Remove
-          //   </Group>
-          // </Menu.Item>,
-        ]}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Table highlightOnHover withColumnBorders striped>
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </Box>
   );
 }

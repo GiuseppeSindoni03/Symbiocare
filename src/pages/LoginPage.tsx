@@ -1,22 +1,16 @@
 import { useLoginMutation } from "../hooks/use-login-mutation";
 import { useUser } from "../context/UserContext";
 import { Navigate, useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Center,
-  Divider,
-  Paper,
-  PasswordInput,
-  Space,
-  TextInput,
-  Title,
-} from "@mantine/core";
+import { Mail, Lock } from "lucide-react";
+import { PasswordInput, TextInput } from "@mantine/core";
 
 import styles from "../styles/Login.module.css";
 
 import Logo from "../components/Logo";
-import { hasLength, isEmail, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
+import { ThemeToggle } from "../components/themeToggle";
+import { useCallback } from "react";
+import { loginSchema } from "../types/validation/login/login.schema";
 
 export default function LoginPage() {
   const mutation = useLoginMutation();
@@ -24,88 +18,116 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const form = useForm({
-    mode: "controlled",
     initialValues: {
       email: "",
       password: "",
     },
-    validate: {
-      email: isEmail("Invalid email"),
-      password: hasLength({ min: 8 }),
-    },
   });
 
-  async function handleSubmit(values: typeof form.values) {
-    //e.preventDefault();
-    console.log("Credenziali:", values);
+  const handleSubmit = useCallback(
+    async (values: typeof form.values) => {
+      const result = loginSchema.safeParse(values);
 
-    mutation.mutate(values);
-  }
+      if (!result.success) {
+        // Aggiorna gli errori nel form
+        const zodErrors = result.error.flatten().fieldErrors;
+        form.setErrors({
+          email: zodErrors.email?.[0],
+          password: zodErrors.password?.[0],
+        });
+        return;
+      }
+
+      // Se è tutto valido, invia i dati
+      mutation.mutate(values);
+    },
+    [form, mutation]
+  );
 
   if (isAuthenticated) return <Navigate to="/home" />;
 
   return (
-    <div className={styles.page}>
-      {/* <Header /> */}
+    <>
+      <ThemeToggle />
 
-      <main className={styles.main}>
-        <Box className={styles.container}>
-          <Logo dimension={"big"} />
-          <Paper p="xl" radius="lg" style={{ width: "100%" }}>
-            <Title className={styles.title} order={2} mb="md">
-              Welcome back!
-            </Title>
-            <form
-              onSubmit={form.onSubmit(handleSubmit)}
-              className={styles.form}
-            >
-              <TextInput
-                placeholder="Email"
-                {...form.getInputProps("email")}
-                required
-                styles={{ input: { height: 50 } }}
-                className={styles.input}
-              />
-              <PasswordInput
-                placeholder="Password"
-                mt="sm"
-                type="password"
-                required
-                {...form.getInputProps("password")}
-                styles={{ input: { height: 50 } }}
-                className={styles.input}
-              />
-              <Space h="md" />
-              <Center>
-                <Button
-                  variant="gradient"
+      <div className={styles.pageContainer}>
+        {/* <Box className={styles.container}> */}
+
+        <div className={styles.formContainer}>
+          <div className={styles.glassCard}>
+            <div style={{ marginBottom: "2rem" }}>
+              <Logo dimension={"big"} />
+              <h1 className={styles.pageTitle}>SymbioCare</h1>
+              <p className={styles.pageSubTitle}>
+                Accedi al tuo account per continuare
+              </p>
+            </div>
+
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+              <div className={styles.formStack}>
+                <div className={styles.inputGroup}>
+                  {/* <div className={styles.inputWrapper}> */}
+                  <label className={styles.inputLabel} htmlFor="password">
+                    Email
+                  </label>
+
+                  <TextInput
+                    placeholder="la-tua@email.com"
+                    type="text"
+                    leftSection={<Mail size={16} />}
+                    withAsterisk
+                    {...form.getInputProps("email")}
+                    styles={{ input: { height: 50 } }}
+                    className={`${styles.formInput} 
+                    }`}
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel} htmlFor="password">
+                    Password
+                  </label>
+
+                  <PasswordInput
+                    placeholder="La tua Password"
+                    type="password"
+                    leftSection={<Lock size={16} />}
+                    {...form.getInputProps("password")}
+                    styles={{
+                      input: { height: 50 },
+                    }}
+                    className={`${styles.formInput} `}
+                  />
+                </div>
+
+                <button
                   type="submit"
-                  mt="md"
-                  className={styles.button}
-                  gradient={{ from: "indigo", to: "cyan", deg: 90 }}
+                  className={`${styles.btn} ${styles.btnPrimary}`}
+                  // disabled={loading}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "48px",
+                    marginTop: "0.5rem",
+                  }}
                 >
                   Accedi
-                </Button>
-              </Center>
-
-              <Divider my="md" label="o" labelPosition="center" />
-              <Center>
-                <Button
-                  mt="md"
-                  className={styles.button}
-                  onClick={() => navigate("/register")}
-                  variant="gradient"
-                  gradient={{ from: "indigo", to: "cyan", deg: 90 }}
-                >
-                  Registrati
-                </Button>
-              </Center>
+                </button>
+              </div>
             </form>
-          </Paper>
-        </Box>
-      </main>
-
-      {/* <Footer /> */}
-    </div>
+            <div className={styles.navSection}>
+              <p className={styles.navText}>Non hai un account? </p>
+              <button
+                className={styles.btnLink}
+                onClick={() => navigate("/register")}
+              >
+                Registrati
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

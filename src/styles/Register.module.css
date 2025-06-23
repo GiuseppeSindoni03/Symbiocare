@@ -4,17 +4,29 @@
   justify-content: center;
   flex-direction: column;
   min-height: 100vh;
-  border: 1px solid red;
+  background: var(--bg-primary); /* sfondo coerente con tema dark */
+  color: var(--text-primary);
 }
 
 .step {
-  color: var(--primary-color);
+  color: var(--text-primary); /* testo chiaro */
 }
 
 .button {
   min-width: 150px;
   margin: 0 auto;
-  background-color: var(--primary-color);
+  background-color: var(--accent-primary); /* colore principale del tema */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--accent-secondary);
+  transform: translateY(-1px);
 }
 
 .paper {
@@ -22,18 +34,15 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: min-height 0.3s ease;
-  border: 1px solid violet;
-}
-
-.backButton {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 100;
-  transition: transform 0.2s ease;
+  background: var(--glass-bg); /* effetto vetro */
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: min-height 0.3s ease, background 0.3s ease;
 }
 
 .backButton:hover {
   transform: scale(1.1);
+  color: var(--text-secondary);
 }

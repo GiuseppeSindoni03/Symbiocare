@@ -1,10 +1,10 @@
-import { Avatar, Paper } from "@mantine/core";
+import { Avatar, Loader, Paper } from "@mantine/core";
 import { useDoctor } from "../hooks/useDoctor";
 import styles from "../styles/doctorPage.module.css";
 export default function DoctorInfo() {
   const { data: doctor, isLoading, isError } = useDoctor();
 
-  if (isLoading) return <p>Caricamento...</p>;
+  if (isLoading) return <Loader />;
   if (isError || !doctor) return <p>Errore nel recupero dei dati</p>;
 
   return (

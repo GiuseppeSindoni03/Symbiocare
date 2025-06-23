@@ -13,8 +13,8 @@ import {
   register as registerFunction,
 } from "../api/auth";
 import { fetchUserMe } from "../api/user";
-
 import { RegisterInfo } from "../types/registration-form";
+
 interface UserContextType {
   user: User | null;
   isAuthenticated: boolean;
@@ -22,6 +22,7 @@ interface UserContextType {
   logout: () => Promise<void>;
   register: (data: RegisterInfo) => Promise<User>;
 }
+
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
@@ -30,7 +31,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const me = await fetchUserMe(); // fa una GET a /user/me
+        const me = await fetchUserMe();
         setUser(me);
       } catch (e) {
         setUser(null);
@@ -39,22 +40,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
     loadUser();
   }, []);
 
-  // const { data: user } = useQuery({
-  //   queryKey: ["me"],
-  //   queryFn: fetchUserMe,
-  //   staleTime: 5 * 60 * 1000, // 5 minuti: considerato “fresco”
-  //   retry: false, // eviti retry infiniti se non autenticato,
-  //   enabled: true,
-  // });
-
-  // const queryClient = useQueryClient();
-
   const login = async (email: string, password: string) => {
     const user = await loginFunction({ email, password });
 
     setUser(user);
-    //queryClient.setQueryData(["me"], user);
-
     return user;
   };
 
@@ -62,8 +51,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const user = await registerFunction(data);
 
     setUser(user);
-    //queryClient.setQueryData(["me"], user);
-
     return user;
   };
 

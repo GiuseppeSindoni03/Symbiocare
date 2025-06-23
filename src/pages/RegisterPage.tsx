@@ -22,6 +22,8 @@ import { step1Schema } from "../types/validation/registration/step1.schema";
 import { step2Schema } from "../types/validation/registration/step2.schema";
 import { step3Schema } from "../types/validation/registration/step3.schema";
 import { step4Schema } from "../types/validation/registration/step4.schema";
+import { ThemeToggle } from "../components/themeToggle";
+import BackButton from "../components/BackButton";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -122,67 +124,57 @@ export default function RegisterPage() {
   const shouldAllowSelectStep = (step: number) =>
     highestStepVisited >= step && active !== step;
 
-  const form = useForm({
-    initialValues: {
-      name: "Giuseppe",
-      surname: "Sindoni",
-      email: "giuseppe2@example.com",
-      password: "Giuseppe2#",
-      confirmPassword: "Giuseppe2#",
-      cf: "TNSNVN35M44L327Z",
-      birthDate: "1985-02-08",
-      phone: "351123456",
-      gender: "Uomo",
-      address: "Via Roma 25",
-      city: "Napoli",
-      cap: "80100",
-      province: "NA",
-      medicalOffice: "Studio Medico Porricelli",
-      registrationNumber: "NA987654",
-      orderProvince: "NA",
-      orderDate: "2012-07-01",
-      orderType: "Ordine dei Medici Chirurghi",
-      specialization: "Neurologia",
-    },
-  });
   // const form = useForm({
   //   initialValues: {
-  //     name: "",
-  //     surname: "",
-  //     email: "",
-  //     password: "",
-  //     confirmPassword: "",
-  //     cf: "",
-  //     birthDate: "",
-  //     phone: "",
-  //     gender: "",
-  //     address: "",
-  //     city: "",
-  //     cap: "",
-  //     province: "",
-  //     medicalOffice: "",
-  //     registrationNumber: "",
-  //     orderProvince: "",
-  //     orderDate: "",
-  //     orderType: "",
-  //     specialization: "",
+  //     name: "Giuseppe",
+  //     surname: "Sindoni",
+  //     email: "giuseppe2@example.com",
+  //     password: "Giuseppe2#",
+  //     confirmPassword: "Giuseppe2#",
+  //     cf: "TNSNVN35M44L327Z",
+  //     birthDate: "1985-02-08",
+  //     phone: "351123456",
+  //     gender: "Uomo",
+  //     address: "Via Roma 25",
+  //     city: "Napoli",
+  //     cap: "80100",
+  //     province: "NA",
+  //     medicalOffice: "Studio Medico Porricelli",
+  //     registrationNumber: "NA987654",
+  //     orderProvince: "NA",
+  //     orderDate: "2012-07-01",
+  //     orderType: "Ordine dei Medici Chirurghi",
+  //     specialization: "Neurologia",
   //   },
   // });
+  const form = useForm({
+    initialValues: {
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      cf: "",
+      birthDate: "",
+      phone: "",
+      gender: "",
+      address: "",
+      city: "",
+      cap: "",
+      province: "",
+      medicalOffice: "",
+      registrationNumber: "",
+      orderProvince: "",
+      orderDate: "",
+      orderType: "",
+      specialization: "",
+    },
+  });
 
   return (
     <>
-      <Tooltip label="Torna alla Home" position="bottom" withArrow>
-        <ActionIcon
-          variant="light"
-          color="indigo"
-          radius="xl"
-          size="lg"
-          onClick={() => navigate("/")}
-          className={styles.backButton}
-        >
-          <IconArrowLeft size={24} />
-        </ActionIcon>
-      </Tooltip>
+      <BackButton />
+      <ThemeToggle />
 
       <div className={styles.container}>
         <Box maw={800} mx="auto" mt="xl">
@@ -246,8 +238,6 @@ export default function RegisterPage() {
                 {active > 0 && (
                   <Button
                     onClick={() => handleStepChange(active - 1)}
-                    variant="gradient"
-                    gradient={{ from: "indigo", to: "cyan", deg: 90 }}
                     className={styles.button}
                   >
                     Indietro
@@ -256,8 +246,6 @@ export default function RegisterPage() {
                 {active < 3 && (
                   <Button
                     onClick={() => handleStepChange(active + 1)}
-                    variant="gradient"
-                    gradient={{ from: "indigo", to: "cyan", deg: 90 }}
                     className={styles.button}
                   >
                     Avanti
@@ -267,8 +255,6 @@ export default function RegisterPage() {
                   <Button
                     type="submit"
                     loading={mutation.isPending}
-                    variant="gradient"
-                    gradient={{ from: "indigo", to: "cyan", deg: 90 }}
                     className={styles.button}
                   >
                     Registrati
