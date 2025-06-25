@@ -12,16 +12,12 @@ export default function DoctorPage() {
     mutation.mutate();
   }, [mutation]);
   return (
-    <div>
-      <NavBar />
+    <div className={styles.container}>
+      <DoctorInfo />
 
-      <div className={styles.container}>
-        <DoctorInfo />
-
-        <button onClick={handleLogout} disabled={mutation.isPending}>
-          {mutation.isPending ? "Logout in corso..." : "Logout"}
-        </button>
-      </div>
+      <button onClick={handleLogout} disabled={mutation.isPending}>
+        {mutation.isPending ? "Logout in corso..." : "Logout"}
+      </button>
     </div>
   );
 }

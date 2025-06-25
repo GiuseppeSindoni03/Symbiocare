@@ -1,6 +1,5 @@
 import { PasswordInput, Popover, TextInput } from "@mantine/core";
 import { StepProps } from "../types/registration-form";
-import { useState } from "react";
 import styles from "../styles/Step.module.css";
 
 export default function Step1({ form }: StepProps) {

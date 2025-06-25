@@ -1,10 +1,4 @@
-import {
-  Calendar,
-  dateFnsLocalizer,
-  View,
-  Views,
-  EventWrapperProps,
-} from "react-big-calendar";
+import { Calendar, dateFnsLocalizer, View, Views } from "react-big-calendar";
 import { format } from "date-fns/format";
 import { parse } from "date-fns/parse";
 import { startOfWeek } from "date-fns/startOfWeek";
@@ -15,13 +9,41 @@ import { NavBar } from "../components/navbar";
 import { useAvailability } from "../hooks/use-availability";
 import { Loader } from "@mantine/core";
 import styles from "../styles/calendar.module.css";
-import { useMemo, useCallback, useState, useEffect, Children } from "react";
+import { useMemo, useCallback, useState } from "react";
 import { useAddAVailabilityMutation } from "../hooks/use-add-availabilty.mutation";
 import { CustomEventWrapper } from "../components/CustomEventWrapper";
 import { CalendarEvent } from "../types/calendar-event";
 
 const locales = {
   it: it,
+};
+const formats = {
+  timeGutterFormat: "HH:mm",
+
+  eventTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
+    `${format(start, "HH:mm", { locale: it })} – ${format(end, "HH:mm", {
+      locale: it,
+    })}`,
+  selectRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
+    `${format(start, "HH:mm", { locale: it })} – ${format(end, "HH:mm", {
+      locale: it,
+    })}`,
+
+  dayFormat: (date: Date) => format(date, "d", { locale: it }),
+  weekdayFormat: (date: Date) => format(date, "EEEEEE", { locale: it }),
+  dayHeaderFormat: (date: Date) => format(date, "EEEE d MMMM", { locale: it }),
+  agendaDateFormat: (date: Date) => format(date, "EEEE d MMMM", { locale: it }),
+  agendaTimeFormat: "HH:mm",
+  agendaTimeRangeFormat: ({ start, end }: { start: Date; end: Date }) =>
+    `${format(start, "HH:mm", { locale: it })} – ${format(end, "HH:mm", {
+      locale: it,
+    })}`,
+
+  monthHeaderFormat: (date: Date) => format(date, "MMMM yyyy", { locale: it }),
+  dayRangeHeaderFormat: ({ start, end }: { start: Date; end: Date }) =>
+    `${format(start, "d MMM", { locale: it })} – ${format(end, "d MMM yyyy", {
+      locale: it,
+    })}`,
 };
 
 const localizer = dateFnsLocalizer({
@@ -79,33 +101,45 @@ export default function CalendarPage() {
     setSelectedEvent(event);
   }, []);
 
-  if (isLoading) return <Loader />;
+  if (isLoading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh", // occupa tutto lo schermo
+          width: "100vw", // opzionale ma consigliato
+        }}
+      >
+        <Loader size="xl" />
+      </div>
+    );
 
   return (
-    <div className={styles.calendarContainer}>
-      <NavBar />
-      <div style={{ height: "100vh" }}>
-        <Calendar
-          selectable
-          onSelectSlot={handleSelectSlot}
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          views={[Views.MONTH, Views.WEEK, Views.DAY, Views.AGENDA]}
-          view={currentView}
-          onView={(view) => setCurrentView(view)}
-          onSelectEvent={handleSelectEvent}
-          components={{
-            eventWrapper: ({ children, ...props }: any) => (
-              <CustomEventWrapper {...props} onEventClick={handleSelectEvent}>
-                {children}
-              </CustomEventWrapper>
-            ),
-          }}
-          titleAccessor="title"
-        />
-      </div>
+    <div className={styles.container}>
+      <Calendar
+        selectable
+        onSelectSlot={handleSelectSlot}
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        views={[Views.MONTH, Views.WEEK, Views.DAY, Views.AGENDA]}
+        view={currentView}
+        onView={(view) => setCurrentView(view)}
+        onSelectEvent={handleSelectEvent}
+        formats={formats}
+        components={{
+          eventWrapper: ({ children, ...props }: any) => (
+            <CustomEventWrapper {...props} onEventClick={handleSelectEvent}>
+              {children}
+            </CustomEventWrapper>
+          ),
+        }}
+        titleAccessor="title"
+        culture="it"
+      />
     </div>
   );
 }

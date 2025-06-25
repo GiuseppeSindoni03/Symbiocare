@@ -1,10 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchPatients, fetchPatient } from "../api/patients";
 
-export function usePatients() {
+export function usePatients(
+  page: number = 1,
+  limit: number = 10,
+  search: string = ""
+) {
   return useQuery({
-    queryKey: ["patients"],
-    queryFn: fetchPatients,
+    queryKey: ["patients", { page, limit, search }],
+    queryFn: () => fetchPatients(page, limit, search),
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });

@@ -3,7 +3,7 @@
 }
 
 [data-mantine-color-scheme="dark"] {
-  --bg-primary: #0a0a0a;
+  --bg-primary: #2928292d;
   --bg-secondary: #1a1a1a;
   --bg-tertiary: #2a2a2a;
   --text-primary: #ffffff;
@@ -17,9 +17,11 @@
   --shadow-medium: rgba(0, 0, 0, 0.3);
   --shadow-heavy: rgba(0, 0, 0, 0.5);
   --glass-bg: rgba(13, 13, 13, 0.993);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --calendar-bg: #c4c4c405;
+  --glass-border: rgba(156, 78, 78, 0);
 }
 [data-mantine-color-scheme="light"] {
+  --calendar-bg: #ffffff;
   --bg-primary: #ffffff;
   --bg-secondary: #f4f4f5;
   --bg-tertiary: #e4e4e7;
@@ -42,3 +44,7 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
 }
+
+/* * {
+  border: 1px solid red;
+} */

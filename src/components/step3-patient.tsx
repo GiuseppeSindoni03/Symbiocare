@@ -7,31 +7,31 @@ export default function Step3({ form }: StepProps) {
     <div className={styles.container}>
       <NumberInput
         label="Peso (kg)"
-        required
         className={styles.input}
         {...form.getInputProps("weight")}
+        placeholder="Inserisci il peso corporeo del paziente"
       />
       <NumberInput
         label="Altezza (cm)"
-        required
         className={styles.input}
         {...form.getInputProps("height")}
+        placeholder="Inserisci l'altezza del paziente"
       />
 
       <TextInput
         label="Sport"
-        required
         className={styles.input}
         mt="sm"
         {...form.getInputProps("sport")}
+        placeholder="Inserisci lo sport praticato del paziente"
       />
       <Select
         label="Livello"
         mt="sm"
         className={styles.input}
-        required
         data={["BEGINNER", "INTERMEDIATE", "ADVANCED"]}
         {...form.getInputProps("level")}
+        placeholder="Seleziona il livello atletico del paziente nella sua disciplina"
       />
     </div>
   );

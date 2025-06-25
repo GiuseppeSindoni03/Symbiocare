@@ -1,5 +1,5 @@
-import { Popover, Button, Box, Modal } from "@mantine/core";
-import React, { useState, useRef, useCallback, ReactNode } from "react";
+import { Popover, Button, Box } from "@mantine/core";
+import React, { useCallback, ReactNode } from "react";
 import { useDeleteAvailabilityMutation } from "../hooks/use-delete-availability.mutation";
 import { CalendarEvent } from "../types/calendar-event";
 import { useDisclosure } from "@mantine/hooks";
@@ -15,7 +15,7 @@ export const CustomEventWrapper: React.FC<CustomEventWrapperProps> = ({
   onEventClick,
   children,
 }) => {
-  const [opened, { close, open, toggle }] = useDisclosure();
+  const [opened, { close, open }] = useDisclosure();
 
   const deleteAvailability = useDeleteAvailabilityMutation(() => {});
 

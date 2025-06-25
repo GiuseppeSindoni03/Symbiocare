@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 
 export const useLogoutMutation = ({
-  onSuccessRedirect = "/",
+  onSuccessRedirect = "/login",
   onSuccessMessage = "Logout effettuato con successo, arrivederci!",
   onErrorMessage = "Ooops: ",
 } = {}) => {

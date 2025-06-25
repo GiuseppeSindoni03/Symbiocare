@@ -1,0 +1,173 @@
+/* TOOL BAR */
+
+.rbc-toolbar {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 0.8rem;
+}
+
+/* scritta che indica il mese */
+.rbc-toolbar-label {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* pulsante attivo  */
+.rbc-btn-group .rbc-active {
+  background: var(--accent-primary) !important;
+  color: #fff !important;
+}
+
+/* pulsanti  */
+.rbc-toolbar button {
+  background-color: transparent;
+  border: 1px solid var(--accent-primary);
+
+  color: var(--text-primary);
+}
+
+.rbc-btn-group button:hover {
+  background: var(--accent-secondary) !important;
+  color: white !important;
+}
+
+/* CALENDARIO  */
+
+.rbc-time-view {
+  background-color: var(--calendar-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 2.5rem;
+}
+
+/* .rbc-event {
+  background-color: var(--accent-primary);
+  color: rgb(255, 0, 0);
+  font-weight: bold;
+} */
+
+/* Cambia il colore del giorno attuale */
+/* .rbc-today {
+  background-color: var(--shadow-light);
+  background-color: red;
+} */
+
+/* Giorni della settimana */
+
+.rbc-row {
+  height: 50px;
+}
+
+.rbc-header .rbc-button-link span {
+  font-size: 1.3rem;
+}
+.rbc-header.rbc-today {
+  background-color: var(--shadow-light);
+}
+
+.rbc-row.rbc-time-header-cell .rbc-header {
+  border: none;
+}
+
+/* giorno della settima (oggi) */
+.rbc-header.rbc-today .rbc-button-link span {
+  color: var(--accent-primary);
+}
+
+/* SIDE BAR ORE */
+
+.rbc-time-slot .rbc-label {
+  font-size: 0.8em;
+}
+
+/* elimino i bordi ogni mezzora */
+.rbc-timeslot-group .rbc-time-slot {
+  border: none;
+}
+
+/* Sfondo della griglia */
+
+.rbc-allday-cell {
+  display: none;
+}
+
+/* Celle orarie e divisori */
+.rbc-day-slot,
+.rbc-timeslot-group,
+.rbc-time-content {
+  /* border: none; */
+  /* border-color: var(--glass-border); */
+}
+
+/* .rbc-time-header-content .rbc-day-slot.rbc-time-column {
+  border: none;
+}
+
+.rbc-day-slot.rbc-time-column {
+  border: none;
+} */
+
+/* Orari a sinistra */
+.rbc-label {
+  color: var(--text-secondary); /* es. #ccc */
+  font-weight: bold;
+}
+
+/* Giorno attuale */
+.rbc-today {
+  background-color: var(--shadow-light);
+}
+
+/* Eventi */
+.rbc-event {
+  background-color: var(--accent-primary);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  padding: 2px 4px;
+}
+
+/* Header giorni */
+.rbc-header {
+  background-color: var(--calendar-bg);
+  color: var(--text-primary);
+  border: none;
+}
+
+/* Testo intestazioni (es. "22 Sun") */
+/* .rbc-button-link span {
+  font-weight: bold;
+  color: var(--text-primary);
+} */
+
+/* month view */
+.rbc-month-view {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 0.8rem;
+}
+
+/* giorni lun-mar-mer... */
+.rbc-row.rbc-month-header .rbc-header span {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.rbc-button-link.rbc-show-more {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Hover effect */
+.rbc-button-link.rbc-show-more:hover {
+  color: var(--accent-secondary);
+  text-decoration: underline;
+}
+
+/* off range */
+.rbc-day-bg.rbc-off-range-bg {
+  background-color: var(--bg-tertiary);
+}

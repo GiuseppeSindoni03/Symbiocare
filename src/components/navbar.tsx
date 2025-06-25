@@ -1,72 +1,43 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "../styles/Navbar.module.css";
 import Logo from "./Logo";
-import { Avatar, Indicator } from "@mantine/core";
+import { Avatar, Button, Indicator, TextInput } from "@mantine/core";
 import { ThemeToggle } from "./themeToggle";
-import {
-  IconUsers,
-  IconCalendar,
-  IconClipboardList,
-  IconReportMedical,
-  IconSettings,
-  IconBell,
-  IconStethoscope,
-  IconActivity,
-  IconFileText,
-  IconSearch,
-} from "@tabler/icons-react";
-import { useCallback, useState } from "react";
+import { IconBell, IconSearch } from "@tabler/icons-react";
+import { useUser } from "../context/UserContext";
 
-interface NavItemProps {
-  icon: React.ReactNode;
-  label: string;
-  active?: boolean;
-  badge?: string;
-  onClick?: () => void;
-}
-
-function NavItem({ icon, label, active, badge, onClick }: NavItemProps) {
-  return (
-    <button
-      onClick={onClick}
-      className={`${styles.navItem} ${active ? styles.active : ""}`}
-    >
-      {icon}
-      <span>{label}</span>
-      {badge && <span className="nav-badge">{badge}</span>}
-    </button>
-  );
-}
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function NavBar() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const navItems = [
-    {
-      icon: <IconUsers size={20} />,
-      label: "Patients",
-      path: "/home",
-      badge: "24",
-    },
-    {
-      icon: <IconCalendar size={20} />,
-      label: "Availability Calendar",
-      path: "/availability",
-    },
-    {
-      icon: <IconClipboardList size={20} />,
-      label: "Appointments",
-      path: "/appointments",
-      badge: "3",
-    },
-    { icon: <IconFileText size={20} />, label: "Reports", path: "/reports" },
-    { icon: <IconSettings size={20} />, label: "Settings", path: "/settings" },
-  ];
+  const navigate = useNavigate();
+  const { user } = useUser();
+  const [search, setSearch] = useState("");
+  const query = useQueryClient();
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Reset a pagina 1 e aggiungi la search string nella query URL
+    const newParams = new URLSearchParams({
+      page: "1",
+      limit: "12", // puoi anche recuperarlo dinamicamente
+      search: search,
+    });
+
+    setSearchParams(newParams);
+
+    query.invalidateQueries({
+      queryKey: ["patients"],
+      exact: false,
+    });
+  };
 
   return (
     <div className={styles.container}>
-      <div className={styles.left} onClick={() => navigate("/home")}>
+      <div className={styles.left} onClick={() => navigate("/patients")}>
         <Logo dimension="small" />
         <div className={styles.logoText}>
           <h1>SymbioCare</h1>
@@ -74,6 +45,17 @@ export function NavBar() {
         </div>
       </div>
       <div className={styles.right}>
+        <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
+          <TextInput
+            value={search}
+            onChange={(e) => setSearch(e.currentTarget.value)}
+            placeholder="Cerca pazienti..."
+            size="sm"
+          />
+          <Button type="submit" size="sm" className={styles.headerAction}>
+            <IconSearch size={16} />{" "}
+          </Button>
+        </form>
         <nav className={styles.links}>
           <div className={styles.headerAction}>
             <ThemeToggle absolute={false} />
@@ -105,25 +87,11 @@ export function NavBar() {
         </Indicator>
 
         <div className={styles.userInfo}>
-          <h3>Dr. Giuseppe Sindoni</h3>
-          <p>Cardiologist</p>
+          <h3>
+            Dr. {user?.name} {user?.surname}
+          </h3>
         </div>
       </div>
-
-      <nav className={styles.navbar}>
-        <div className={styles.navSection}></div>
-        <h3 className={styles.navTitle}>Navigation</h3>
-        {navItems.map((item) => (
-          <NavItem
-            key={item.label}
-            {...item}
-            active={location.pathname === item.path}
-            onClick={() => {
-              navigate(item.path);
-            }}
-          />
-        ))}
-      </nav>
     </div>
   );
 }

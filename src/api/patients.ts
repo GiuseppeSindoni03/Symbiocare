@@ -2,10 +2,24 @@ import api from "../services/axiosInstance";
 import { PatientItem } from "../types/patient.interface";
 // import { Patient } from "../types/patient.interface";
 
-export async function fetchPatients() {
-  const res = await api.get<PatientItem[]>("doctor/patients", {
-    withCredentials: true,
-  });
+export interface PatientsResponse {
+  data: PatientItem[];
+  total: number;
+  page: number;
+  limit: number;
+}
+export async function fetchPatients(
+  page: number,
+  limit: number,
+  search: string
+) {
+  console.log("Sono dentro fetchpatients: ", page, limit, search);
+  const res = await api.get<PatientsResponse>(
+    `doctor/patients?page=${page}&limit=${limit}&search=${search}`,
+    {
+      withCredentials: true,
+    }
+  );
   return res.data;
 }
 

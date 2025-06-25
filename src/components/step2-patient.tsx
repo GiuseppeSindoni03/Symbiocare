@@ -9,27 +9,27 @@ export default function Step2({ form }: StepProps) {
         className={styles.input}
         label="Indirizzo"
         mt="sm"
-        required
         {...form.getInputProps("address")}
+        placeholder="Inserisci l'indirizzo di residenza del paziente"
       />
 
       <TextInput
         className={styles.input}
         label="Città"
-        required
         {...form.getInputProps("city")}
+        placeholder="Inserisci la città di residenza del paziente"
       />
       <TextInput
         className={styles.input}
         label="CAP"
-        required
         {...form.getInputProps("cap")}
+        placeholder="Inserisci il CAP di residenza del paziente"
       />
       <TextInput
         className={styles.input}
         label="Provincia"
-        required
         {...form.getInputProps("province")}
+        placeholder="Inserisci la provincia "
       />
     </div>
   );

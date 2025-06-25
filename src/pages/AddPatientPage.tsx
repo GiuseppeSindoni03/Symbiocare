@@ -131,10 +131,10 @@ export default function AddPatientPage() {
     initialValues: {
       name: "",
       surname: "",
-      email: "f",
+      email: "",
       cf: "",
       birthDate: new Date(),
-      gender: "",
+      gender: "Uomo",
       phone: "",
       address: "",
       city: "",
@@ -143,7 +143,7 @@ export default function AddPatientPage() {
       weight: 0,
       height: 0,
       bloodType: "",
-      level: "",
+      level: "INTERMEDIATE",
       sport: "",
       patologies: [],
       medications: [],
@@ -152,121 +152,118 @@ export default function AddPatientPage() {
   });
 
   return (
-    <div>
-      <NavBar />
-
-      <div className={styles.container}>
-        <Box maw={800} mx="auto" mt="xl">
-          <Paper
-            withBorder
-            shadow="md"
-            p="lg"
-            radius="md"
-            className={styles.paper}
+    <div className={styles.container}>
+      <Box maw={800} mx="auto" mt="xl">
+        <Paper
+          withBorder
+          shadow="md"
+          p="lg"
+          radius="md"
+          className={styles.paper}
+        >
+          <Stepper
+            className={styles.step}
+            active={active}
+            onStepClick={setActive}
           >
-            <Stepper
-              className={styles.step}
-              active={active}
-              onStepClick={setActive}
+            <Stepper.Step
+              label="Primo step"
+              description="Informazioni personali"
+              allowStepSelect={shouldAllowSelectStep(0)}
+              color="var(--accent-primary)"
             >
-              <Stepper.Step
-                label="First step"
-                description="Personal Info"
-                allowStepSelect={shouldAllowSelectStep(0)}
-              >
-                Personal Info
-              </Stepper.Step>
-              <Stepper.Step
-                label="Second step"
-                description="Address Info"
-                allowStepSelect={shouldAllowSelectStep(1)}
-              >
-                Address Info
-              </Stepper.Step>
-              <Stepper.Step
-                label="Third Step"
-                description="Physical Info"
-                allowStepSelect={shouldAllowSelectStep(2)}
-              >
-                Physical Info
-              </Stepper.Step>
-              <Stepper.Step
-                label="Fourth Step"
-                description="Medical Info"
-                allowStepSelect={shouldAllowSelectStep(3)}
-              >
-                Medical Info
-              </Stepper.Step>
-
-              <Stepper.Completed>
-                Completed, click back button to get to previous step
-              </Stepper.Completed>
-            </Stepper>
-
-            <form
-              onSubmit={form.onSubmit(handleSubmit)}
-              className={styles.form}
+              Personal Info
+            </Stepper.Step>
+            <Stepper.Step
+              label="Secondo step"
+              description="Informazioni di residenza"
+              allowStepSelect={shouldAllowSelectStep(1)}
+              color="var(--accent-primary)"
             >
-              {active === 0 && <Step1 form={form} />}
-              {active === 1 && <Step2 form={form} />}
-              {active === 2 && <Step3 form={form} />}
-              {active === 3 && <Step4 form={form} />}
+              Address Info
+            </Stepper.Step>
+            <Stepper.Step
+              label="Terzo Step"
+              description="Informazioni fisiche"
+              allowStepSelect={shouldAllowSelectStep(2)}
+              color="var(--accent-primary)"
+            >
+              Physical Info
+            </Stepper.Step>
+            <Stepper.Step
+              label="Quarto Step"
+              description="Informazioni mediche"
+              allowStepSelect={shouldAllowSelectStep(3)}
+              color="var(--accent-primary)"
+            >
+              Medical Info
+            </Stepper.Step>
 
-              <Group justify="center" mt="xl" className={styles.footer}>
-                {active > 0 && (
-                  <Button
-                    onClick={() => handleStepChange(active - 1)}
-                    variant="gradient"
-                    gradient={{ from: "indigo", to: "cyan", deg: 90 }}
-                    className={styles.button}
-                  >
-                    Indietro
-                  </Button>
-                )}
-                {active < 3 && (
-                  <Button
-                    onClick={() => handleStepChange(active + 1)}
-                    variant="gradient"
-                    gradient={{ from: "indigo", to: "cyan", deg: 90 }}
-                    className={styles.button}
-                  >
-                    Avanti
-                  </Button>
-                )}
-                {active === 3 && (
-                  <Button
-                    type="submit"
-                    loading={mutation.isPending}
-                    variant="gradient"
-                    gradient={{ from: "indigo", to: "cyan", deg: 90 }}
-                    className={styles.button}
-                  >
-                    Salva Paziente
-                  </Button>
-                )}
-              </Group>
-            </form>
-          </Paper>
-        </Box>
+            <Stepper.Completed>
+              Completed, click back button to get to previous step
+            </Stepper.Completed>
+          </Stepper>
 
-        {id && (
-          <Modal
-            opened={opened}
-            className={styles.modal}
-            onClose={handler.close}
-            title="Authentication"
-          >
-            <QRCode
-              //title="title"
-              value={id}
-              bgColor="#fff"
-              //fgcolor="#0000"
-              level="L"
-              size={256}
-            />
-          </Modal>
-        )}
-      </div>
+          <form onSubmit={form.onSubmit(handleSubmit)} className={styles.form}>
+            {active === 0 && <Step1 form={form} />}
+            {active === 1 && <Step2 form={form} />}
+            {active === 2 && <Step3 form={form} />}
+            {active === 3 && <Step4 form={form} />}
+
+            <Group justify="center" mt="xl" className={styles.footer}>
+              {active > 0 && (
+                <Button
+                  onClick={() => handleStepChange(active - 1)}
+                  className={styles.button}
+                >
+                  Indietro
+                </Button>
+              )}
+              {active < 3 && (
+                <Button
+                  onClick={() => handleStepChange(active + 1)}
+                  className={styles.button}
+                >
+                  Avanti
+                </Button>
+              )}
+              {active === 3 && (
+                <Button
+                  type="submit"
+                  loading={mutation.isPending}
+                  className={styles.button}
+                >
+                  Salva Paziente
+                </Button>
+              )}
+            </Group>
+          </form>
+        </Paper>
+      </Box>
+
+      {id && (
+        <Modal
+          opened={opened}
+          onClose={handler.close}
+          title="QR Code di accesso"
+          size="auto"
+          radius="md"
+          overlayProps={{
+            backgroundOpacity: 0.55,
+            blur: 3,
+          }}
+          centered
+        >
+          <QRCode
+            //title="title"
+            value={id}
+            // bgColor="var(--bg-primary)"
+            // color="var(--text-primary)"
+            level="L"
+            size={300}
+          />
+        </Modal>
+      )}
     </div>
   );
 }

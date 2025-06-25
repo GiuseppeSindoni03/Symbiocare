@@ -1,12 +1,6 @@
-import { useContext } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { ActionIcon } from "@mantine/core";
-import {
-  IconBrightness,
-  IconLighter,
-  IconMoon,
-  IconSun,
-} from "@tabler/icons-react";
+import { IconMoon, IconSun } from "@tabler/icons-react";
 
 interface ThemeToggleProps {
   absolute?: boolean;

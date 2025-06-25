@@ -44,7 +44,7 @@ export default function LoginPage() {
     [form, mutation]
   );
 
-  if (isAuthenticated) return <Navigate to="/home" />;
+  if (isAuthenticated) return <Navigate to="/patients" />;
 
   return (
     <>

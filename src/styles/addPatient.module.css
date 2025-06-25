@@ -1,9 +1,9 @@
 .container {
+  width: 100%;
+  height: 100%;
   display: flex;
-  align-items: center;
+  align-content: center;
   justify-content: center;
-  flex-direction: column;
-  min-height: 100vh;
 }
 
 .step {
@@ -13,16 +13,25 @@
 .button {
   min-width: 150px;
   margin: 0 auto;
-  background-color: var(--primary-color);
+  background-color: var(--accent-primary); /* colore principale del tema */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
+.button:hover {
+  background-color: var(--accent-secondary);
+  transform: translateY(-1px);
+}
 .paper {
-  /* //height: 1000px; */
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   transition: min-height 0.3s ease;
-  /* border: 1px solid rgb(128, 0, 255); */
 }
 
 .backButton {
@@ -38,13 +47,5 @@
 }
 
 .form {
-  /* border: 1px solid rgb(0, 102, 255); */
   height: fit-content;
-}
-
-.modal {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }

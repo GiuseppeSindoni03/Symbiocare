@@ -1,5 +1,6 @@
+import { Loader } from "lucide-react";
 import api from "../services/axiosInstance";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Container() {
@@ -11,7 +12,7 @@ export default function Container() {
       (res) => res,
       (error) => {
         if (error?.response?.status === 401) {
-          navigate("/");
+          navigate("/login");
         }
 
         return Promise.reject(error);

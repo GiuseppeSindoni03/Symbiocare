@@ -15,13 +15,13 @@ export default function Step1({ form }: StepProps) {
           className={styles.input}
           label="Nome"
           {...form.getInputProps("name")}
-          required
+          placeholder="Inserisci il nome del paziente"
         />
         <TextInput
           className={styles.input}
           label="Cognome"
           {...form.getInputProps("surname")}
-          required
+          placeholder="Inserisci il cognome del paziente"
         />
 
         <TextInput
@@ -29,18 +29,18 @@ export default function Step1({ form }: StepProps) {
           label="Email"
           mt="sm"
           {...form.getInputProps("email")}
-          required
+          placeholder="Inserisci l'indirizzo mail del paziente"
         />
         <TextInput
           className={styles.input}
           label="Codice fiscale"
           mt="sm"
-          required
           {...form.getInputProps("cf")}
+          placeholder="Inserisci il codice fiscale del paziente"
         />
         {/* <DatePickerInput
           className={styles.input}
-          required
+          
           label="Data di nascita"
           error={form.errors.birthDate}
           {...form.getInputProps("birthDate")}
@@ -51,23 +51,23 @@ export default function Step1({ form }: StepProps) {
           label="Data di nascita"
           mt="sm"
           type="date"
-          required
           {...form.getInputProps("birthDate")}
+          placeholder="Inserisci la data di nascita del paziente"
         />
         <Select
           className={styles.input}
           label="Genere"
           mt="sm"
-          required
           data={["Uomo", "Donna", "Altro"]}
           {...form.getInputProps("gender")}
+          placeholder="Inserisci il genere del paziente"
         />
         <TextInput
           className={styles.input}
           label="Telefono"
           mt="sm"
-          required
           {...form.getInputProps("phone")}
+          placeholder="Inserisci il numero di telefono del paziente"
         />
       </div>
     </>

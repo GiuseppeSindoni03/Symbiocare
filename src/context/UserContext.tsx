@@ -18,6 +18,7 @@ import { RegisterInfo } from "../types/registration-form";
 interface UserContextType {
   user: User | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<User>;
   logout: () => Promise<void>;
   register: (data: RegisterInfo) => Promise<User>;
@@ -27,6 +28,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -35,6 +37,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
         setUser(me);
       } catch (e) {
         setUser(null);
+      } finally {
+        setIsLoading(false);
       }
     };
     loadUser();
@@ -62,6 +66,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   return (
     <UserContext.Provider
       value={{
+        isLoading,
         user,
         isAuthenticated: !!user,
         login,

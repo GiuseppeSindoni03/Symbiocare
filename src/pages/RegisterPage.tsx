@@ -1,17 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/Register.module.css";
 import { useForm } from "@mantine/form";
-import {
-  Box,
-  Group,
-  Paper,
-  Button,
-  Stepper,
-  Tooltip,
-  ActionIcon,
-} from "@mantine/core";
+import { Box, Group, Paper, Button, Stepper } from "@mantine/core";
 
-import { IconArrowLeft } from "@tabler/icons-react";
 import { useState } from "react";
 import Step1 from "../components/step1-registration";
 import Step2 from "../components/step2-registration";
@@ -26,7 +17,6 @@ import { ThemeToggle } from "../components/themeToggle";
 import BackButton from "../components/BackButton";
 
 export default function RegisterPage() {
-  const navigate = useNavigate();
   const [active, setActive] = useState(0);
   const mutation = useRegisterMutation();
   const [highestStepVisited, setHighestStepVisited] = useState(active);

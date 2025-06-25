@@ -12,6 +12,7 @@ export default function Step4({ form }: StepProps) {
         mt="sm"
         data={["A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"]}
         {...form.getInputProps("bloodType")}
+        placeholder="Inserisci il gruppo sanguigno del paziente"
       />
 
       <TagsInput
@@ -19,7 +20,7 @@ export default function Step4({ form }: StepProps) {
         label="Patologie"
         mt="sm"
         data={[]}
-        placeholder="Aggiungi patologie"
+        placeholder="Inserisci le patologie del paziente"
         {...form.getInputProps("patologies")}
         error={form.errors.patologies}
       />
@@ -29,7 +30,7 @@ export default function Step4({ form }: StepProps) {
         label="Farmaci"
         mt="sm"
         data={[]}
-        placeholder="Aggiungi farmaci"
+        placeholder="Inserisci i farmaci attuali del paziente"
         {...form.getInputProps("medications")}
         error={form.errors.medications}
       />
@@ -39,7 +40,7 @@ export default function Step4({ form }: StepProps) {
         label="Infortuni"
         mt="sm"
         data={[]}
-        placeholder="Aggiungi infortuni"
+        placeholder="Inserisci gli infortuni pregressi del paziente"
         {...form.getInputProps("injuries")}
         error={form.errors.injuries}
       />
