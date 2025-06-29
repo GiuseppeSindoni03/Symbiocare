@@ -8,6 +8,17 @@
   color: var(--text-primary);
 }
 
+.stepTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.stepperWrapper {
+  margin-bottom: 2rem;
+}
+
 .step {
   color: var(--text-primary); /* testo chiaro */
 }
@@ -29,6 +40,11 @@
   transform: translateY(-1px);
 }
 
+.backButton:hover {
+  transform: scale(1.1);
+  color: var(--text-secondary);
+}
+
 .paper {
   min-height: 500px;
   display: flex;
@@ -40,9 +56,4 @@
   border-radius: 16px;
   padding: 2rem;
   transition: min-height 0.3s ease, background 0.3s ease;
-}
-
-.backButton:hover {
-  transform: scale(1.1);
-  color: var(--text-secondary);
 }

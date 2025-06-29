@@ -1,7 +1,5 @@
 import PatientsTable from "../components/patients-table";
-import styles from "../styles/PatientsPage.module.css";
-import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import styles from "../styles/PatientPage.module.css";
 
 export default function PatientsPage() {
   return (

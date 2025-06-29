@@ -1,13 +1,10 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "@mantine/core/styles.css";
 import Login from "./pages/LoginPage";
-import Home from "./pages/PatientsPage";
 import Container from "./components/container";
 import { ToastContainer } from "react-toastify";
 import Register from "./pages/RegisterPage";
-import DoctorPage from "./pages/DoctorPage";
 import AddPatientPage from "./pages/AddPatientPage";
-import CalendarPage from "./pages/CalendarPage";
 import PatientPage from "./pages/PatientPage";
 import "@mantine/core/styles.css";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -17,6 +14,9 @@ import PatientsPage from "./pages/PatientsPage";
 import Layout from "./components/Layout";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./styles/custom.calendar.css";
+import CalendarAvailability from "./pages/CalendarAvailability";
+import CalendarReservations from "./pages/CalendarReservation";
+import DoctorInfo from "./components/doctorInfo";
 
 function App() {
   const { isLoading } = useUser();
@@ -51,10 +51,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route path="/patients" element={<PatientsPage />} />
-              <Route path="/doctor-page" element={<DoctorPage />} />
-              <Route path="/add-patient" element={<AddPatientPage />} />
-              <Route path="/availability" element={<CalendarPage />} />
               <Route path="/patients/:id" element={<PatientPage />} />
+              <Route path="add-patient" element={<AddPatientPage />} />
+              <Route path="/doctor-page" element={<DoctorInfo />} />
+              <Route path="/reservations" element={<CalendarReservations />} />
+              <Route path="/availability" element={<CalendarAvailability />} />
             </Route>
 
             <Route path="/login" element={<Login />} />

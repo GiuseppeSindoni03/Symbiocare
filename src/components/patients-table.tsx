@@ -1,6 +1,6 @@
 import { usePatients } from "../hooks/use-patients";
 import { PatientItem } from "../types/patient.interface";
-import { Box, Loader, Menu } from "@mantine/core";
+import { ActionIcon, Box, Loader } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "@mantine/core/styles.css";
@@ -8,10 +8,9 @@ import "@mantine/core/styles.css";
 import {
   MantineReactTable,
   MRT_ColumnDef,
-  MRT_Table,
   useMantineReactTable,
 } from "mantine-react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 export default function PatientsTable() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,10 +63,10 @@ export default function PatientsTable() {
   const table = useMantineReactTable({
     data: data?.data ?? [],
     columns,
+    enableRowActions: true,
     enableTopToolbar: false,
     enablePagination: true,
     manualPagination: true,
-    enableRowActions: true,
     enableColumnActions: false,
     enableColumnFilters: false,
     enableSorting: false,
@@ -93,41 +92,52 @@ export default function PatientsTable() {
 
       setSearchParams(urlParams);
     },
-    renderRowActionMenuItems: ({ row }) => (
-      <>
-        <Menu.Item
-          onClick={() => navigate(`/patients/${row.original.id}`)}
-          leftSection={<IconUser size={24} />}
+    renderRowActions: ({ row }) => (
+      <Box
+        style={(theme) => ({
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: theme.spacing.xs,
+          cursor: "pointer",
+          transition: "all 0.2s ease",
+          "&:hover": {
+            transform: "translateY(-1px)",
+            opacity: 0.85,
+          },
+        })}
+        onClick={() => navigate(`/patients/${row.original.id}`)}
+      >
+        <ActionIcon
+          variant="subtle"
+          color="var(--accent-primary)"
+          radius="xl"
+          size="lg"
         >
-          {" "}
-          Visualizza il profilo
-        </Menu.Item>
-      </>
+          <IconUser size={22} />
+        </ActionIcon>
+        {/* <Text size="sm" c="blue.7" fw={500}>
+          Visualizza profilo
+        </Text> */}
+      </Box>
     ),
   });
-
-  if (isLoading) {
+  if (isLoading)
     return (
       <div
         style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
+          height: "100vh", // occupa tutto lo schermo
         }}
       >
         <Loader size="xl" />
       </div>
     );
-  }
-
   return (
     <Box>
       <MantineReactTable table={table} />
-      {/* <div style={{ marginTop: "10px", fontSize: "12px", color: "#666" }}>
-        Debug: Total: {data?.total}, Current: {data?.data?.length}, Page:{" "}
-        {pagination.pageIndex + 1}
-      </div> */}
     </Box>
   );
 }

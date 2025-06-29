@@ -1,5 +1,4 @@
-import { Box, Button, Group, Stepper, Modal, Paper } from "@mantine/core";
-import { NavBar } from "../components/navbar";
+import { Box, Button, Group, Stepper, Paper } from "@mantine/core";
 import styles from "../styles/addPatient.module.css";
 import { useForm } from "@mantine/form";
 import { useAddPatientMutation } from "../hooks/use-add-patient.mutation";
@@ -13,20 +12,13 @@ import { step2Schema } from "../types/validation/add-patient/step2.schema";
 import { step3Schema } from "../types/validation/add-patient/step3.schema";
 import { FormValues } from "../types/patient-registration-form";
 import { step4Schema } from "../types/validation/add-patient/step4.schema";
-import QRCode from "react-qr-code";
-import { useDisclosure } from "@mantine/hooks";
 
 export default function AddPatientPage() {
-  const [id, setId] = useState<string | null>(null);
-
-  const mutation = useAddPatientMutation(setId);
-  // const navigate = useNavigate();
+  const mutation = useAddPatientMutation();
   const [active, setActive] = useState(0);
   const [highestStepVisited, setHighestStepVisited] = useState(active);
 
   const stepSchemas = [step1Schema, step2Schema, step3Schema, step4Schema];
-
-  const [opened, handler] = useDisclosure(false);
 
   const getStepData = (step: number) => {
     switch (step) {
@@ -100,15 +92,10 @@ export default function AddPatientPage() {
       ...values,
       birthDate: new Date(values.birthDate),
     });
-
-    handler.open();
   }
 
   const handleStepChange = async (nextStep: number) => {
     // chiamare e verificare lo schema dell'attuale step prima di andare avanti:
-
-    console.log("Step attuale: " + active);
-    console.log("NextStep: ", nextStep);
 
     const isOutOfBounds = nextStep > 4 || nextStep < 0;
 
@@ -153,7 +140,7 @@ export default function AddPatientPage() {
 
   return (
     <div className={styles.container}>
-      <Box maw={800} mx="auto" mt="xl">
+      <Box mx="auto" mt="xl">
         <Paper
           withBorder
           shadow="md"
@@ -162,7 +149,7 @@ export default function AddPatientPage() {
           className={styles.paper}
         >
           <Stepper
-            className={styles.step}
+            className={styles.stepperWrapper}
             active={active}
             onStepClick={setActive}
           >
@@ -172,7 +159,7 @@ export default function AddPatientPage() {
               allowStepSelect={shouldAllowSelectStep(0)}
               color="var(--accent-primary)"
             >
-              Personal Info
+              Informazioni personali
             </Stepper.Step>
             <Stepper.Step
               label="Secondo step"
@@ -180,7 +167,7 @@ export default function AddPatientPage() {
               allowStepSelect={shouldAllowSelectStep(1)}
               color="var(--accent-primary)"
             >
-              Address Info
+              Informazioni di residenza
             </Stepper.Step>
             <Stepper.Step
               label="Terzo Step"
@@ -188,7 +175,7 @@ export default function AddPatientPage() {
               allowStepSelect={shouldAllowSelectStep(2)}
               color="var(--accent-primary)"
             >
-              Physical Info
+              Informazioni fisiche
             </Stepper.Step>
             <Stepper.Step
               label="Quarto Step"
@@ -196,11 +183,11 @@ export default function AddPatientPage() {
               allowStepSelect={shouldAllowSelectStep(3)}
               color="var(--accent-primary)"
             >
-              Medical Info
+              Informazioni mediche
             </Stepper.Step>
 
             <Stepper.Completed>
-              Completed, click back button to get to previous step
+              Complimenti, hai completato tutti i campi!
             </Stepper.Completed>
           </Stepper>
 
@@ -210,11 +197,11 @@ export default function AddPatientPage() {
             {active === 2 && <Step3 form={form} />}
             {active === 3 && <Step4 form={form} />}
 
-            <Group justify="center" mt="xl" className={styles.footer}>
+            <Group justify="space-between" mt="xl" className={styles.footer}>
               {active > 0 && (
                 <Button
                   onClick={() => handleStepChange(active - 1)}
-                  className={styles.button}
+                  className="button"
                 >
                   Indietro
                 </Button>
@@ -222,7 +209,7 @@ export default function AddPatientPage() {
               {active < 3 && (
                 <Button
                   onClick={() => handleStepChange(active + 1)}
-                  className={styles.button}
+                  className="button"
                 >
                   Avanti
                 </Button>
@@ -231,7 +218,7 @@ export default function AddPatientPage() {
                 <Button
                   type="submit"
                   loading={mutation.isPending}
-                  className={styles.button}
+                  className="button"
                 >
                   Salva Paziente
                 </Button>
@@ -240,30 +227,6 @@ export default function AddPatientPage() {
           </form>
         </Paper>
       </Box>
-
-      {id && (
-        <Modal
-          opened={opened}
-          onClose={handler.close}
-          title="QR Code di accesso"
-          size="auto"
-          radius="md"
-          overlayProps={{
-            backgroundOpacity: 0.55,
-            blur: 3,
-          }}
-          centered
-        >
-          <QRCode
-            //title="title"
-            value={id}
-            // bgColor="var(--bg-primary)"
-            // color="var(--text-primary)"
-            level="L"
-            size={300}
-          />
-        </Modal>
-      )}
     </div>
   );
 }

@@ -14,7 +14,10 @@ export const useRegisterMutation = () => {
   return useMutation({
     mutationFn: (data: RegisterInfo) => register(data),
     onSuccess: (user) => {
-      toast.success(`Benvenuto ${user.name} :)`);
+      if (user.gender === "Uomo") toast.success(`Benvenuto ${user.name} :)`);
+      else if (user.gender === "Donna")
+        toast.success(`Benvenuta ${user.name} :)`);
+      else toast.success(`Benvenutx ${user.name} :)`);
 
       console.log("entro qua dentro");
       navigate("/home");

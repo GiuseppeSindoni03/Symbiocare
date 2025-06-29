@@ -3,8 +3,9 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { addAvailability } from "../api/doctor";
 import { CreateAvailabilityDto } from "../types/create-availabilty.dto";
+import { Range } from "./use-reservations";
 
-export const useAddAVailabilityMutation = (onSuccessCallback: () => void) => {
+export const useAddAVailabilityMutation = (range: Range) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -13,9 +14,7 @@ export const useAddAVailabilityMutation = (onSuccessCallback: () => void) => {
       return addAvailability(availability);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["availabilities"] });
-
-      onSuccessCallback();
+      queryClient.invalidateQueries({ queryKey: ["availabilities", range] });
 
       console.log("Success");
       toast.success("Disponibilità inserita con successo");

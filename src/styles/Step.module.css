@@ -8,7 +8,36 @@
   min-height: 480px;
 }
 
+.row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: wrap; /* opzionale: utile su schermi piccoli */
+}
+
+.input {
+  flex: 1; /* Ogni input prende metà spazio */
+  min-width: 200px;
+}
+
 .input {
   width: 100%;
-  max-width: 400px;
+  min-width: 200px;
+}
+
+.input label {
+  font-size: 1em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.sectionTitle {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
 }

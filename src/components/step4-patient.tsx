@@ -8,7 +8,6 @@ export default function Step4({ form }: StepProps) {
       <Select
         className={styles.input}
         label="Gruppo sanguigno"
-        required
         mt="sm"
         data={["A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"]}
         {...form.getInputProps("bloodType")}

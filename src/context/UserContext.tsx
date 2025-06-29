@@ -17,6 +17,7 @@ import { RegisterInfo } from "../types/registration-form";
 
 interface UserContextType {
   user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<User>;
@@ -66,6 +67,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   return (
     <UserContext.Provider
       value={{
+        setUser,
         isLoading,
         user,
         isAuthenticated: !!user,

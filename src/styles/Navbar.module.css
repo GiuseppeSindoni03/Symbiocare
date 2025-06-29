@@ -26,36 +26,58 @@
 }
 
 .logoText {
-  position: relative;
-  z-index: 101; /* o superiore a .navbar (che è 100) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2; /* riduce spazio verticale */
 }
 
 .logoText h1 {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--accent-primary);
-  line-height: 1;
-  z-index: 101;
+  margin: 0;
 }
 
 .logoText p {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--secondary-text);
-  line-height: 1;
-  z-index: 100;
+  margin: 2px 0 0 0; /* meno spazio sopra */
+}
+
+.user {
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px; /* aggiunto per gestire spazio tra avatar e info */
+  padding: 8px 12px; /* padding interno */
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2; /* riduce spazio verticale */
 }
 
 .userInfo h3 {
   font-size: 16px;
   font-weight: 700;
   color: var(--accent-primary);
-  line-height: 1;
+  margin: 0;
+}
+
+.user:hover {
+  cursor: pointer;
+  box-shadow: 0 2px 8px var(--shadow-light);
+  transition: box-shadow 0.2s ease-in-out;
 }
 
 .userInfo p {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--secondary-text);
-  line-height: 1;
+  margin: 2px 0 0 0; /* meno spazio sopra */
 }
 
 .left {

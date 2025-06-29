@@ -1,4 +1,45 @@
 .container {
   width: 100%;
-  height: 100%;
+  height: auto;
+  /* border: 1px solid red; */
+}
+
+.headerPopover {
+  display: flex;
+
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  color: "var(--accent-primary)";
+}
+
+.infoPatient {
+  border-radius: 4px;
+  background-color: var(--bg-primary);
+  transition: background-color 0.2s;
+}
+.choose {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-n;
+}
+
+.choose .confirm {
+  background-color: green;
+}
+
+.choose .confirm:hover {
+  background-color: rgb(0, 78, 0);
+}
+
+.choose .decline {
+  background-color: red;
+}
+
+.choose .decline:hover {
+  background-color: rgb(176, 0, 0);
 }

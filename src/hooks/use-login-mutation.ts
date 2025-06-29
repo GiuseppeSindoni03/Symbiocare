@@ -12,9 +12,14 @@ export const useLoginMutation = () => {
   return useMutation({
     mutationFn: (data: { email: string; password: string }) =>
       login(data.email, data.password),
+
     onSuccess: async (user, _variables) => {
-      // console.log("User:", user.name);
-      toast.success(`Benvenuto ${user.name} :)`);
+      console.log(user);
+
+      if (user.gender === "Uomo") toast.success(`Benvenuto ${user.name} :)`);
+      else if (user.gender === "Donna")
+        toast.success(`Benvenuta ${user.name} :)`);
+      else toast.success(`Benvenutx ${user.name} :)`);
 
       console.log("entro qua dentro");
       navigate("/home");

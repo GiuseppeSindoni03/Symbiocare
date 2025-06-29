@@ -15,7 +15,7 @@ export async function login({ email, password }: LoginData) {
   );
 
   // console.log("Res: ", res);
-  // console.log("Data: ", res.data);
+  console.log("Utente: ", res.data);
 
   return res.data;
 }

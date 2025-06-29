@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import styles from "../styles/Register.module.css";
 import { useForm } from "@mantine/form";
 import { Box, Group, Paper, Button, Stepper } from "@mantine/core";
@@ -163,7 +162,7 @@ export default function RegisterPage() {
 
   return (
     <>
-      <BackButton />
+      <BackButton position="absolute" />
       <ThemeToggle />
 
       <div className={styles.container}>

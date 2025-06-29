@@ -1,15 +1,15 @@
-import { UserPlus } from "lucide-react";
+import { CalendarPlus2, LogOut, UserPlus } from "lucide-react";
 import { usePatients } from "../hooks/use-patients";
 import styles from "../styles/sidebar.module.css";
 
 import {
   IconUsers,
-  IconCalendar,
   IconClipboardList,
   IconSettings,
 } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useLogoutMutation } from "../hooks/use-logout-mutation";
+import { useCallback } from "react";
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -35,7 +35,14 @@ function NavItem({ icon, label, active, badge, onClick }: NavItemProps) {
 const SideBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { data, isLoading } = usePatients();
+  const { data } = usePatients();
+  const mutation = useLogoutMutation();
+
+  const logout = {
+    icon: <LogOut size={25} />,
+    label: "Logout",
+    path: "/login",
+  };
 
   const navItems = [
     {
@@ -45,20 +52,21 @@ const SideBar = () => {
       badge: `${data?.total ? data.total : ""} `,
     },
     {
-      icon: <IconCalendar size={25} />,
+      icon: <UserPlus size={25} />,
+      label: "Aggiungi paziente",
+      path: "/add-patient",
+    },
+    {
+      icon: <CalendarPlus2 size={25} />,
       label: "Calendario disponibiltà",
       path: "/availability",
     },
     {
       icon: <IconClipboardList size={25} />,
-      label: "Visite mediche",
-      path: "/appointments",
+      label: "Calendario prenotazioni",
+      path: "/reservations",
     },
-    {
-      icon: <UserPlus size={25} />,
-      label: "Aggiungi paziente",
-      path: "/add-patient",
-    },
+
     {
       icon: <IconSettings size={25} />,
       label: "Impostazioni",
@@ -66,21 +74,27 @@ const SideBar = () => {
     },
   ];
 
+  const handleLogout = useCallback(() => {
+    mutation.mutate();
+  }, [mutation]);
+
   return (
-    <div>
+    <div className={styles.sidebar}>
       <nav className={styles.navbar}>
-        <div className={styles.navSection}></div>
-        <h3 className={styles.navTitle}>Navigation</h3>
-        {navItems.map((item) => (
-          <NavItem
-            key={item.label}
-            {...item}
-            active={location.pathname === item.path}
-            onClick={() => {
-              navigate(item.path);
-            }}
-          />
-        ))}
+        <div className={styles.navTop}>
+          <h3 className={styles.navTitle}>Navigazione</h3>
+          {navItems.map((item) => (
+            <NavItem
+              key={item.label}
+              {...item}
+              active={location.pathname === item.path}
+              onClick={() => navigate(item.path)}
+            />
+          ))}
+        </div>
+        <div className={styles.navBottom}>
+          <NavItem {...logout} onClick={handleLogout} />
+        </div>
       </nav>
     </div>
   );

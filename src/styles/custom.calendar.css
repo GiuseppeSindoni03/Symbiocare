@@ -1,5 +1,3 @@
-/* TOOL BAR */
-
 .rbc-toolbar {
   border: 1px solid var(--border-color);
   border-radius: 16px;
@@ -37,7 +35,9 @@
   background-color: var(--calendar-bg);
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  padding: 2.5rem;
+  /* padding: 2.5rem; */
+  padding: 1rem;
+  /* border: 1px solid red; */
 }
 
 /* .rbc-event {
@@ -92,12 +92,12 @@
 }
 
 /* Celle orarie e divisori */
-.rbc-day-slot,
+/* .rbc-day-slot,
 .rbc-timeslot-group,
-.rbc-time-content {
-  /* border: none; */
-  /* border-color: var(--glass-border); */
-}
+.rbc-time-content { */
+/* border: none; */
+/* border-color: var(--glass-border); */
+/* } */
 
 /* .rbc-time-header-content .rbc-day-slot.rbc-time-column {
   border: none;
@@ -170,4 +170,46 @@
 /* off range */
 .rbc-day-bg.rbc-off-range-bg {
   background-color: var(--bg-tertiary);
+}
+
+/* indicatore ora */
+
+.rbc-current-time-indicator {
+  background-color: red;
+}
+
+.pendingEvent {
+  background-color: #fff3cd; /* giallo tenue */
+  color: #856404; /* testo scuro leggibile */
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+}
+
+/* Assicura che gli eventi siano posizionati correttamente */
+.rbc-event {
+  background-color: var(--accent-primary);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  padding: 2px 4px;
+  position: absolute !important; /* Forza posizionamento assoluto */
+  z-index: 1;
+  /* border: 2px solid red !important; */
+}
+
+/* Contenitore degli eventi */
+.rbc-events-container {
+  position: relative;
+}
+
+/* Time slots */
+.rbc-timeslot-group {
+  position: relative;
+  /* border: 1px solid blue !important; */
+}
+
+/* Previeni overflow */
+.rbc-time-content {
+  overflow: visible;
 }

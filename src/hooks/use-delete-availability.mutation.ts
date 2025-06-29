@@ -4,9 +4,7 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { deleteAvailability } from "../api/doctor";
 
-export const useDeleteAvailabilityMutation = (
-  onSuccessCallback: () => void
-) => {
+export const useDeleteAvailabilityMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -16,8 +14,6 @@ export const useDeleteAvailabilityMutation = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["availabilities"] });
-
-      onSuccessCallback();
 
       console.log("Success");
       toast.success("Disponibilità eliminata con successo!");

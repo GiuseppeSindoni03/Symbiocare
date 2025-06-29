@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "../styles/Navbar.module.css";
 import Logo from "./Logo";
 import { Avatar, Button, Indicator, TextInput } from "@mantine/core";
@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function NavBar() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [_searchParams, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
   const { user } = useUser();
@@ -63,33 +63,27 @@ export function NavBar() {
           <button className={styles.headerAction}>
             <IconBell size={18} />
           </button>
-          {/* <button onClick={() => navigate("/add-patient")}>
-            Aggiungi paziente
-          </button>
-          <button onClick={() => navigate("/Home")}>Patients</button>
-          <button onClick={() => navigate("/calendar")}>Calendar</button> */}
         </nav>
 
-        <Indicator
-          inline
-          size={16}
-          offset={7}
-          position="bottom-end"
-          color="green"
-          withBorder
-          className={styles.indicator}
-        >
-          <Avatar
-            radius="xl"
-            src="doctor.svg"
-            onClick={() => navigate("/doctor-page")}
-          ></Avatar>
-        </Indicator>
+        <div className={styles.user} onClick={() => navigate("/doctor-page")}>
+          <Indicator
+            inline
+            size={16}
+            offset={7}
+            position="bottom-end"
+            color="green"
+            withBorder
+            className={styles.indicator}
+          >
+            <Avatar radius="xl" size={45} src="doctor.svg"></Avatar>
+          </Indicator>
 
-        <div className={styles.userInfo}>
-          <h3>
-            Dr. {user?.name} {user?.surname}
-          </h3>
+          <div className={styles.userInfo}>
+            <h3>
+              Dr. {user?.name} {user?.surname}
+            </h3>
+            <p>{user?.doctor?.specialization}</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,4 @@
-/* th,
-td {
-  text-align: left;
-  padding: 8px;
-   border: 1px solid #dee2e6; 
-} */
+.mantine-Pagination-control {
+  background-color: #fe0000 !important;
+  border: 1px solid #fe0000 !important;
+}

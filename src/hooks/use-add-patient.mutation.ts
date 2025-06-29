@@ -4,33 +4,32 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { addPatient } from "../api/doctor";
 import { CreatePatientDto } from "../types/create-patient.dto";
+import { useNavigate } from "react-router-dom";
 
-export const useAddPatientMutation = (
-  onSuccessCallback: (id: string) => void
-) => {
+export const useAddPatientMutation = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: (patient: CreatePatientDto) => {
       console.log("Sto inviando i dati al backend");
       return addPatient(patient);
     },
-    onSuccess: (id) => {
+    onSuccess: (patientId) => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
 
-      onSuccessCallback(id);
+      console.log("Navigating to patient ID:", patientId);
+      navigate(`/patients/${patientId}`);
 
       console.log("Success");
       toast.success("Paziente inserito con successo");
-
-      //navigate("/patient");
     },
     onError: (error: AxiosError<any>) => {
       let message = error?.response?.data?.message || "Errore sconosciuto";
+
       console.log("Error:", error);
       if (Array.isArray(message)) message = message.join(" | ");
       toast.error(`${message}`);
-      // navigate("/home");
     },
     retry: false,
   });
