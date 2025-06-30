@@ -68,7 +68,7 @@ export async function deleteAvailability(idAvailability: string) {
 
 export async function fetchReservations(
   range: Range | null,
-  status: "ALL" | "CONFIRMED"
+  status: "ALL" | "CONFIRMED" | "PENDING"
 ) {
   const params = new URLSearchParams();
 
@@ -99,4 +99,17 @@ export async function patchReservation(reservation: PatchedReservation) {
   );
 
   return reservation.status;
+}
+
+export async function fetchHowManyReservations() {
+  const res = await api.get<{ total: number }>(
+    `reservations/count`,
+
+    {
+      withCredentials: true,
+    }
+  );
+
+  console.log("Count ", res.data);
+  return res.data;
 }

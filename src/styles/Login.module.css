@@ -80,77 +80,45 @@
   width: 100%;
 }
 
-/* Assicurati che gli input occupino tutto lo spazio disponibile */
 .formInput {
   width: 100% !important;
   box-sizing: border-box;
-}
 
-/* Override degli stili Mantine per assicurare full width */
-.formInput .mantine-TextInput-root,
-.formInput .mantine-PasswordInput-root {
-  width: 100%;
-  border: none !important;
-}
-
-.formInput .mantine-TextInput-input,
-.formInput .mantine-PasswordInput-input {
-  width: 100% !important;
-  box-sizing: border-box;
-  padding: 0.875rem 1rem 0.875rem 2.75rem;
   background: var(--bg-secondary) !important;
   border-radius: 8px;
   color: var(--text-primary) !important;
   font-size: 1rem;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   height: 50px;
+  box-shadow: 0 0 0 2px var(--glass-border);
 }
 
-.formInput .mantine-TextInput-input::placeholder,
-.formInput .mantine-PasswordInput-input::placeholder {
+.formInput::placeholder {
   color: var(--text-muted) !important;
 }
 
-.formInput .mantine-TextInput-input:focus,
-.formInput .mantine-PasswordInput-input:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px var(--accent-primary);
-  background: var(--bg-tertiary) !important;
-}
-
-.formInput .mantine-TextInput-input:hover:not(:focus),
-.formInput .mantine-PasswordInput-input:hover:not(:focus) {
+.formInput:focus {
   border-color: var(--text-muted) !important;
   background: var(--bg-tertiary) !important;
 }
-/* 
-.inputError .mantine-TextInput-input,
-.inputError .mantine-PasswordInput-input {
-  border-color: #ef4444 !important;
-  box-shadow: 0 0 0 3px var(--border-color) !important;
-} */
-
-/* Stili per le icone degli input in tema scuro */
-.inputWrapper .mantine-TextInput-section,
-.inputWrapper .mantine-PasswordInput-section {
-  color: var(--text-muted) !important;
-}
-
-/* Stile per il bottone di toggle della password */
-.inputWrapper .mantine-PasswordInput-visibilityToggle {
-  color: var(--text-muted) !important;
-}
-
-.inputWrapper .mantine-PasswordInput-visibilityToggle:hover {
-  color: var(--text-secondary) !important;
-}
-
 .inputLabel {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
   display: block;
+}
+
+.formInput .mantine-PasswordInput-input:focus {
+  border-color: var(--text-muted) !important;
+  background: var(--bg-tertiary) !important;
+  box-shadow: none !important;
+}
+
+.formInput .mantine-TextInput-input:focus {
+  border-color: var(--text-muted) !important;
+  background: var(--bg-tertiary) !important;
+  box-shadow: none !important;
 }
 
 /* .errorMessage {
@@ -223,6 +191,10 @@
 }
 
 .navSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   margin-top: 1.5rem;
   padding-top: 1.5rem;

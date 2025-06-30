@@ -78,3 +78,20 @@ export const localizer = dateFnsLocalizer({
   getDay,
   locales,
 });
+
+// Formato compatto
+
+// Output: "sab 5 lug"
+
+// Formato personalizzato
+
+export const formatTime = (dateString: string) => {
+  return new Date(dateString).toLocaleTimeString("it-IT", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+export const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("it-IT");
+};

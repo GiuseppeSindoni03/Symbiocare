@@ -125,7 +125,7 @@ export default function CalendarAvailability() {
         end: newRange.end.toISOString(),
       });
     },
-    [[currentView, setSearchParams]]
+    [currentView, setSearchParams]
   );
 
   const EventWrapperWithPopover: React.FC<EventWrapperWithChildrenProps> = ({
@@ -214,7 +214,7 @@ export default function CalendarAvailability() {
           toolbar: (props) => (
             <CustomToolbar
               {...props}
-              views={[Views.WEEK, Views.DAY, Views.MONTH]}
+              views={[Views.DAY, Views.WEEK, Views.MONTH]}
               invalidate={() => {
                 if (!range) return;
                 queryClient.invalidateQueries({

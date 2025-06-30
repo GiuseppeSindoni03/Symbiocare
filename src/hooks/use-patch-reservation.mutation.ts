@@ -17,6 +17,7 @@ export const usePatchReservationMutation = () => {
     },
     onSuccess: (status: string) => {
       queryClient.invalidateQueries({ queryKey: ["reservations"] });
+      queryClient.invalidateQueries({ queryKey: ["reservations/count"] });
 
       if (status === "confirm")
         toast.success("Prenotazione accettata con successo");

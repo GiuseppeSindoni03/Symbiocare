@@ -118,16 +118,6 @@
   background-color: var(--shadow-light);
 }
 
-/* Eventi */
-.rbc-event {
-  background-color: var(--accent-primary);
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 6px;
-  padding: 2px 4px;
-}
-
 /* Header giorni */
 .rbc-header {
   background-color: var(--calendar-bg);
@@ -146,6 +136,7 @@
   border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 0.8rem;
+  min-height: 100vh;
 }
 
 /* giorni lun-mar-mer... */
@@ -178,14 +169,23 @@
   background-color: red;
 }
 
-.pendingEvent {
-  background-color: #fff3cd; /* giallo tenue */
-  color: #856404; /* testo scuro leggibile */
-  border: 1px solid #ffeeba;
+.rbc-event.pendingEvent {
+  background-color: var(--bg-primary); /* giallo tenue */
+  color: var(--text-primary); /* testo scuro leggibile */
+  border: 1px solid var(--accent-primary);
   border-radius: 4px;
 }
 
-/* Assicura che gli eventi siano posizionati correttamente */
+/* .rbc-event {
+  background-color: var(--accent-primary);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  padding: 2px 4px;
+  position: absolute !important;
+  z-index: 1;
+} */
 .rbc-event {
   background-color: var(--accent-primary);
   color: white;
@@ -193,9 +193,16 @@
   border: none;
   border-radius: 6px;
   padding: 2px 4px;
-  position: absolute !important; /* Forza posizionamento assoluto */
+  position: absolute !important;
   z-index: 1;
-  /* border: 2px solid red !important; */
+
+  /* Aggiungi queste proprietà per limitare la larghezza */
+  max-width: 100% !important;
+  width: auto !important;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Contenitore degli eventi */

@@ -17,6 +17,7 @@ import "./styles/custom.calendar.css";
 import CalendarAvailability from "./pages/CalendarAvailability";
 import CalendarReservations from "./pages/CalendarReservation";
 import DoctorInfo from "./components/doctorInfo";
+import ReservationsRequests from "./pages/ReservationsRequests";
 
 function App() {
   const { isLoading } = useUser();
@@ -56,6 +57,10 @@ function App() {
               <Route path="/doctor-page" element={<DoctorInfo />} />
               <Route path="/reservations" element={<CalendarReservations />} />
               <Route path="/availability" element={<CalendarAvailability />} />
+              <Route
+                path="/reservartions/requests"
+                element={<ReservationsRequests />}
+              />
             </Route>
 
             <Route path="/login" element={<Login />} />

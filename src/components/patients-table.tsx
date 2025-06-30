@@ -1,6 +1,6 @@
 import { usePatients } from "../hooks/use-patients";
 import { PatientItem } from "../types/patient.interface";
-import { ActionIcon, Box, Loader } from "@mantine/core";
+import { ActionIcon, Box, Loader, Space } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "@mantine/core/styles.css";
@@ -138,6 +138,7 @@ export default function PatientsTable() {
   return (
     <Box>
       <MantineReactTable table={table} />
+      <Space h={"lg"} />
     </Box>
   );
 }

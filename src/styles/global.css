@@ -39,10 +39,12 @@
   --shadow-medium: rgba(0, 0, 0, 0.3);
   --shadow-heavy: rgba(0, 0, 0, 0.5);
   --glass-bg: rgba(13, 13, 13, 0.993);
-  --calendar-bg: #c4c4c405;
+  --calendar-bg: #2a2a2a;
   --glass-border: rgba(156, 78, 78, 0);
+  --card-border: #2a2a2a;
 }
 [data-mantine-color-scheme="light"] {
+  --card-border: #ffffff;
   --calendar-bg: #ffffff;
   --bg-primary: #ffffff;
   --bg-secondary: #f4f4f5;

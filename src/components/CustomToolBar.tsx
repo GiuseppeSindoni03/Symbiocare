@@ -1,23 +1,8 @@
 import { ToolbarProps, View } from "react-big-calendar";
-import {
-  Button,
-  Divider,
-  Group,
-  Menu,
-  Space,
-  Text,
-  Title,
-  Tooltip,
-} from "@mantine/core";
+import { Button, Divider, Group, Menu, Text, Title } from "@mantine/core";
 import { useSearchParams } from "react-router-dom";
 import styles from "../styles/customToolbar.module.css";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Filter,
-  MoveLeft,
-  MoveRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
 
 interface CustomToolbarProps<T extends object> extends ToolbarProps<T> {
   invalidate?: () => void;

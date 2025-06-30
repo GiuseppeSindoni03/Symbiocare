@@ -1,15 +1,11 @@
-import { CalendarPlus2, LogOut, UserPlus } from "lucide-react";
+import { CalendarPlus2, LogOut, NotebookPen, UserPlus } from "lucide-react";
 import { usePatients } from "../hooks/use-patients";
 import styles from "../styles/sidebar.module.css";
 
-import {
-  IconUsers,
-  IconClipboardList,
-  IconSettings,
-} from "@tabler/icons-react";
+import { IconUsers, IconClipboardList } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../hooks/use-logout-mutation";
-import { useCallback } from "react";
+import { useReservationCounts } from "../hooks/use-reservations";
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -36,13 +32,7 @@ const SideBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { data } = usePatients();
-  const mutation = useLogoutMutation();
-
-  const logout = {
-    icon: <LogOut size={25} />,
-    label: "Logout",
-    path: "/login",
-  };
+  const { data: counts } = useReservationCounts();
 
   const navItems = [
     {
@@ -66,17 +56,19 @@ const SideBar = () => {
       label: "Calendario prenotazioni",
       path: "/reservations",
     },
-
     {
-      icon: <IconSettings size={25} />,
-      label: "Impostazioni",
-      path: "/settings",
+      icon: <NotebookPen size={25} />,
+      label: "Richieste prenotazioni",
+      path: "/reservartions/requests",
+      badge: `${counts?.total ? counts.total : ""} `,
     },
-  ];
 
-  const handleLogout = useCallback(() => {
-    mutation.mutate();
-  }, [mutation]);
+    // {
+    //   icon: <IconSettings size={25} />,
+    //   label: "Impostazioni",
+    //   path: "/settings",
+    // },
+  ];
 
   return (
     <div className={styles.sidebar}>
@@ -91,9 +83,6 @@ const SideBar = () => {
               onClick={() => navigate(item.path)}
             />
           ))}
-        </div>
-        <div className={styles.navBottom}>
-          <NavItem {...logout} onClick={handleLogout} />
         </div>
       </nav>
     </div>

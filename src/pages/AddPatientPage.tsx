@@ -146,7 +146,7 @@ export default function AddPatientPage() {
           shadow="md"
           p="lg"
           radius="md"
-          className={styles.paper}
+          className={styles.main}
         >
           <Stepper
             className={styles.stepperWrapper}

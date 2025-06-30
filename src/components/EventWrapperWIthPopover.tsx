@@ -101,10 +101,10 @@ export const EventWrapperWithPopover: React.FC<Props> = ({
                   )
                 : "—"}
             </Text>
-            <Text fw={900}>
+            {/* <Text fw={900}>
               Stato <Calendar1Icon size={15} />
             </Text>
-            {selectedEvent?.status} {selectedEvent?.id}
+            {selectedEvent?.status} {selectedEvent?.id} */}
             <Divider my={"sm"} />
             <div className={styles.infoPatient}>
               <div className={styles.headerPopover}>

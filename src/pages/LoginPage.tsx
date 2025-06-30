@@ -2,7 +2,7 @@ import { useLoginMutation } from "../hooks/use-login-mutation";
 import { useUser } from "../context/UserContext";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
-import { PasswordInput, TextInput } from "@mantine/core";
+import { Divider, PasswordInput, Space, TextInput } from "@mantine/core";
 
 import styles from "../styles/Login.module.css";
 
@@ -77,9 +77,16 @@ export default function LoginPage() {
                     leftSection={<Mail size={16} />}
                     withAsterisk
                     {...form.getInputProps("email")}
-                    styles={{ input: { height: 50 } }}
-                    className={`${styles.formInput} 
-                    }`}
+                    className={styles.formInput}
+                    styles={{
+                      input: {
+                        height: 50,
+                        "&:focus": {
+                          borderColor: "var(--text-muted) !important",
+                          background: "var(--bg-tertiary) !important",
+                        },
+                      },
+                    }}
                   />
                 </div>
 
@@ -94,9 +101,15 @@ export default function LoginPage() {
                     leftSection={<Lock size={16} />}
                     {...form.getInputProps("password")}
                     styles={{
-                      input: { height: 50 },
+                      input: {
+                        height: 50,
+                        "&:focus": {
+                          borderColor: "var(--text-muted) !important",
+                          background: "var(--bg-tertiary) !important",
+                        },
+                      },
                     }}
-                    className={`${styles.formInput} `}
+                    className={styles.formInput}
                   />
                 </div>
 
@@ -116,8 +129,10 @@ export default function LoginPage() {
                 </button>
               </div>
             </form>
+            {/* <Divider label="o" p/> */}
             <div className={styles.navSection}>
               <p className={styles.navText}>Non hai un account? </p>
+              <Space w={"md"} />
               <button
                 className={styles.btnLink}
                 onClick={() => navigate("/register")}
