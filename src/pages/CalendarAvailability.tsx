@@ -3,7 +3,14 @@ import { Calendar, View, Views, EventWrapperProps } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { getRangeFromDateAndView, formats, localizer } from "../utils/calendar";
 import { useAvailability } from "../hooks/use-availability";
-import { Button, Loader, Popover } from "@mantine/core";
+import {
+  Button,
+  Loader,
+  Modal,
+  Popover,
+  Space,
+  TextInput,
+} from "@mantine/core";
 import styles from "../styles/calendar.module.css";
 import { useMemo, useCallback, useState, useEffect } from "react";
 import { useAddAVailabilityMutation } from "../hooks/use-add-availabilty.mutation";
@@ -14,6 +21,9 @@ import { Range } from "../hooks/use-reservations";
 import { useSearchParams } from "react-router-dom";
 import { CustomToolbar } from "../components/CustomToolBar";
 import { useQueryClient } from "@tanstack/react-query";
+import { useDisclosure } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
+import { toast } from "react-toastify";
 
 interface EventWrapperWithChildrenProps
   extends EventWrapperProps<CalendarEvent> {
@@ -34,7 +44,19 @@ export default function CalendarAvailability() {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const [opened, handler] = useDisclosure(false);
+  const [selectedSlot, setSelectedSlot] = useState<{
+    start: Date;
+    end: Date;
+  } | null>(null);
+
   const deleteAvailability = useDeleteAvailabilityMutation();
+
+  const form = useForm({
+    initialValues: {
+      title: "",
+    },
+  });
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
@@ -99,20 +121,46 @@ export default function CalendarAvailability() {
     );
   }, [availabilityData]);
 
+  const handleAddAvailability = useCallback(
+    (values: { title: string }) => {
+      if (isDeleting || !selectedSlot) return;
+
+      mutation.mutate(
+        {
+          title: values.title,
+          start: selectedSlot.start.toISOString(),
+          end: selectedSlot.end.toISOString(),
+        },
+        {
+          onSuccess: () => {
+            handler.close();
+            form.reset();
+            setSelectedSlot(null);
+          },
+          onError: (error) => {
+            toast.error("Errore nell'aggiunta della disponibilità:" + error);
+          },
+        }
+      );
+    },
+    [mutation, isDeleting, selectedSlot, handler, form]
+  );
+
   const handleSelectSlot = useCallback(
-    ({ start, end }: { start: Date; end: Date }) => {
+    (slotInfo: { start: Date; end: Date }) => {
       if (isDeleting) return;
 
-      const title = window.prompt("Nuova disponibilità");
-      if (title)
-        mutation.mutate({
-          title,
-          start: start.toISOString(),
-          end: end.toISOString(),
-        });
+      setSelectedSlot({ start: slotInfo.start, end: slotInfo.end });
+      handler.open();
     },
-    [mutation, isDeleting]
+    [isDeleting, handler]
   );
+
+  const handleModalClose = useCallback(() => {
+    handler.close();
+    form.reset();
+    setSelectedSlot(null);
+  }, [handler, form]);
 
   const handleNavigate = useCallback(
     (date: Date) => {
@@ -226,6 +274,92 @@ export default function CalendarAvailability() {
           ),
         }}
       />
+      <Modal
+        opened={opened}
+        onClose={handleModalClose}
+        title={null}
+        size="md"
+        radius="lg"
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+        centered={true}
+        withCloseButton={false}
+      >
+        <div className={styles.modalContainer}>
+          <div className={styles.modal}>
+            <div className={styles.modalHeader}>
+              <h2
+                style={{
+                  marginBottom: "0.5rem",
+                  fontSize: "1.5rem",
+                  color: "var(--text-primary)",
+                }}
+              >
+                Inserisci disponibilità
+              </h2>
+
+              {selectedSlot && (
+                <div className={styles.modalDates}>
+                  <p className={styles.customDates}>
+                    <strong>Dal</strong>
+
+                    {selectedSlot.start.toLocaleString("it-IT")}
+                  </p>
+                  <Space w={"xl"} />
+                  <Space w={"xl"} />
+                  <p className={styles.customDates}>
+                    <strong>Al</strong>{" "}
+                    {selectedSlot.end.toLocaleString("it-IT")}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className={styles.formContainerModal}>
+              <form
+                className={styles.formModal}
+                onSubmit={form.onSubmit(handleAddAvailability)}
+              >
+                <TextInput
+                  size="lg"
+                  {...form.getInputProps("title")}
+                  placeholder="Dai un titolo a questa disponibilità..."
+                  w={"400px"}
+                  style={{ marginBottom: "1rem" }}
+                  required
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "0.5rem",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Button
+                    type="submit"
+                    loading={mutation.isPending}
+                    className="button"
+                    disabled={!selectedSlot}
+                  >
+                    Aggiungi
+                  </Button>
+                  <Space w={"xl"} />
+                  <Button
+                    className="button"
+                    onClick={handleModalClose}
+                    disabled={mutation.isPending}
+                  >
+                    Annulla
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </Modal>
+      ;
     </div>
   );
 }

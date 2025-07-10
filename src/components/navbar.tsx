@@ -10,16 +10,19 @@ import {
   IconUser,
 } from "@tabler/icons-react";
 import { useUser } from "../context/UserContext";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLogoutMutation } from "../hooks/use-logout-mutation";
+import { useDebouncedValue } from "@mantine/hooks";
 
 export function NavBar() {
-  const [_searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUser();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [debouncedSearch] = useDebouncedValue(search, 400); // 400 ms di debounce
+
   const query = useQueryClient();
   const mutation = useLogoutMutation();
 
@@ -27,19 +30,36 @@ export function NavBar() {
     mutation.mutate();
   }, [mutation]);
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
     const newParams = new URLSearchParams({
       page: "1",
       limit: "12",
-      search: search,
     });
+
+    if (debouncedSearch.trim()) {
+      newParams.set("search", debouncedSearch.trim());
+    }
+
     setSearchParams(newParams);
-    query.invalidateQueries({
-      queryKey: ["patients"],
-      exact: false,
-    });
-  };
+  }, [debouncedSearch]);
+
+  // const handleSearchSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const newParams = new URLSearchParams({
+  //     page: "1",
+  //     limit: "12",
+  //   });
+
+  //   if (search.trim()) {
+  //     newParams.set("search", search.trim());
+  //   }
+
+  //   setSearchParams(newParams);
+  //   query.invalidateQueries({
+  //     queryKey: ["patients"],
+  //     exact: false,
+  //   });
+  // };
 
   return (
     <header className={styles.navbar}>
@@ -55,7 +75,7 @@ export function NavBar() {
       {/* Search Section - Solo nella pagina pazienti */}
       {location.pathname === "/patients" && (
         <div className={styles.searchSection}>
-          <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
+          <form className={styles.searchForm}>
             <TextInput
               value={search}
               leftSection={<IconSearch size={16} />}

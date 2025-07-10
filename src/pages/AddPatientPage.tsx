@@ -138,18 +138,43 @@ export default function AddPatientPage() {
     },
   });
 
+  // const form = useForm<FormValues>({
+  //   initialValues: {
+  //     name: "Luca",
+  //     surname: "Rossi",
+  //     email: "luca.rossi@example.com",
+  //     cf: "RSSLCU85T10H501Z",
+  //     birthDate: new Date("1990-04-15"),
+  //     gender: "Uomo",
+  //     phone: "3451234567",
+  //     address: "Via Garibaldi 10",
+  //     city: "Milano",
+  //     cap: "20100",
+  //     province: "MI",
+  //     weight: 75,
+  //     height: 180,
+  //     bloodType: "A+",
+  //     level: "INTERMEDIATE",
+  //     sport: "Corsa",
+  //     patologies: ["Asma"],
+  //     medications: ["Ventolin"],
+  //     injuries: ["Distorsione caviglia - 2023"],
+  //   },
+  // });
+
   return (
     <div className={styles.container}>
-      <Box mx="auto" mt="xl">
+      <div className={styles.main}>
         <Paper
           withBorder
           shadow="md"
           p="lg"
           radius="md"
-          className={styles.main}
+          className={styles.paper}
         >
           <Stepper
-            className={styles.stepperWrapper}
+            className={styles.header}
+            size="lg"
             active={active}
             onStepClick={setActive}
           >
@@ -158,37 +183,25 @@ export default function AddPatientPage() {
               description="Informazioni personali"
               allowStepSelect={shouldAllowSelectStep(0)}
               color="var(--accent-primary)"
-            >
-              Informazioni personali
-            </Stepper.Step>
+            ></Stepper.Step>
             <Stepper.Step
               label="Secondo step"
               description="Informazioni di residenza"
               allowStepSelect={shouldAllowSelectStep(1)}
               color="var(--accent-primary)"
-            >
-              Informazioni di residenza
-            </Stepper.Step>
+            ></Stepper.Step>
             <Stepper.Step
               label="Terzo Step"
               description="Informazioni fisiche"
               allowStepSelect={shouldAllowSelectStep(2)}
               color="var(--accent-primary)"
-            >
-              Informazioni fisiche
-            </Stepper.Step>
+            ></Stepper.Step>
             <Stepper.Step
               label="Quarto Step"
               description="Informazioni mediche"
               allowStepSelect={shouldAllowSelectStep(3)}
               color="var(--accent-primary)"
-            >
-              Informazioni mediche
-            </Stepper.Step>
-
-            <Stepper.Completed>
-              Complimenti, hai completato tutti i campi!
-            </Stepper.Completed>
+            ></Stepper.Step>
           </Stepper>
 
           <form onSubmit={form.onSubmit(handleSubmit)} className={styles.form}>
@@ -226,7 +239,7 @@ export default function AddPatientPage() {
             </Group>
           </form>
         </Paper>
-      </Box>
+      </div>
     </div>
   );
 }

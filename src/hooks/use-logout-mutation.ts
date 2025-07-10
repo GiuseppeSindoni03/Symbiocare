@@ -1,5 +1,5 @@
 // hooks/useLogoutMutation.ts
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -10,12 +10,15 @@ export const useLogoutMutation = ({
   onSuccessMessage = "Logout effettuato con successo, arrivederci!",
   onErrorMessage = "Ooops: ",
 } = {}) => {
+  const queryClient = useQueryClient();
   const { logout } = useUser();
   const navigate = useNavigate();
 
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
+      queryClient.clear();
+
       toast.success(onSuccessMessage);
       navigate(onSuccessRedirect);
     },

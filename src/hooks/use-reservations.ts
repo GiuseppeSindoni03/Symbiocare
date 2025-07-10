@@ -14,7 +14,7 @@ export function useReservations(
   return useQuery<GroupedReservations[]>({
     queryKey: ["reservations", range, status],
     queryFn: () => fetchReservations(range, status),
-    staleTime: 1000 * 60 * 5,
+
     retry: 1,
     refetchOnWindowFocus: true, // Aggiorna quando si torna sulla finestra
     refetchInterval: 1000 * 60 * 2,
@@ -23,9 +23,9 @@ export function useReservations(
 
 export function useReservationCounts() {
   return useQuery<{ total: number }>({
-    queryKey: ["reservations/count"],
+    queryKey: ["reservations"],
     queryFn: fetchHowManyReservations,
-    staleTime: 1000 * 60 * 5,
+
     retry: 1,
     refetchOnWindowFocus: true, // Aggiorna quando si torna sulla finestra
     refetchInterval: 1000 * 60 * 2,

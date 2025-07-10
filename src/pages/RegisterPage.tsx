@@ -14,11 +14,13 @@ import { step3Schema } from "../types/validation/registration/step3.schema";
 import { step4Schema } from "../types/validation/registration/step4.schema";
 import { ThemeToggle } from "../components/themeToggle";
 import BackButton from "../components/BackButton";
+import z from "zod";
 
 export default function RegisterPage() {
   const [active, setActive] = useState(0);
   const mutation = useRegisterMutation();
   const [highestStepVisited, setHighestStepVisited] = useState(active);
+  const [disabled, setDisabled] = useState(false);
 
   const stepSchemas = [step1Schema, step2Schema, step3Schema, step4Schema];
 
@@ -67,27 +69,35 @@ export default function RegisterPage() {
     mutation.mutate(values);
   }
 
-  const handleValidation = (): boolean => {
+  const handleValidation = async (): Promise<boolean> => {
     console.log("Active: ", active);
 
     const schema = stepSchemas[active];
     const stepData = getStepData(active);
-    const result = schema.safeParse(stepData);
 
-    if (!result.success) {
-      const errors = result.error.flatten().fieldErrors;
+    try {
+      await schema.parseAsync(stepData);
 
-      // Imposta gli errori nel form
-      Object.entries(errors).forEach(([field, messages]) => {
-        if (messages && messages.length > 0) {
-          form.setFieldError(field, messages[0]); // solo il primo messaggio
-        }
-      });
+      return true;
+    } catch (error) {
+      console.log("Validazione fallita");
 
-      return false;
+      if (error instanceof z.ZodError) {
+        // Gestisci gli errori di validazione
+        const errors = error.flatten().fieldErrors;
+
+        console.log("Sono dentro l'if degli errori");
+
+        // Imposta gli errori nel form
+        Object.entries(errors).forEach(([field, messages]) => {
+          if (messages && messages.length > 0) {
+            form.setFieldError(field, messages[0]); // solo il primo messaggio
+          }
+        });
+      }
+
+      return false; // La validazione non è passata, restituiamo false
     }
-
-    return true;
   };
 
   const handleStepChange = async (nextStep: number) => {
@@ -103,7 +113,10 @@ export default function RegisterPage() {
     }
 
     if (nextStep > active) {
-      if (!handleValidation()) return;
+      if (!handleValidation()) {
+        console.log("Validazione fallita");
+        return;
+      }
     } else setActive(active - 1);
 
     setActive(nextStep);
@@ -166,68 +179,67 @@ export default function RegisterPage() {
       <ThemeToggle />
 
       <div className={styles.container}>
-        <Box maw={800} mx="auto" mt="xl">
+        <div className={styles.main}>
           <Paper
             withBorder
             shadow="md"
             p="lg"
             radius="md"
             className={styles.paper}
-            style={{ overflow: "visible" }}
+            // style={{ border: "1px solid red" }}
           >
-            {/* <Title order={2} mb="md">
-          Registrazione Medico
-        </Title> */}
             <Stepper
-              className={styles.step}
               active={active}
               onStepClick={setActive}
+              className={styles.header}
+              size="lg"
+
+              // style={{ border: "1px solid red" }}
             >
               <Stepper.Step
-                label="First step"
-                description="General Info"
+                color="var(--accent-primary)"
+                className={styles.step}
+                label="Primo step"
+                description="Infomazioni generali"
                 allowStepSelect={shouldAllowSelectStep(0)}
-              >
-                General Info
-              </Stepper.Step>
+              ></Stepper.Step>
               <Stepper.Step
-                label="Second step"
-                description="Personal Info"
+                color="var(--accent-primary)"
+                label="Secondo step"
+                description="Infomazioni personali"
                 allowStepSelect={shouldAllowSelectStep(1)}
-              >
-                Personal Info
-              </Stepper.Step>
+              ></Stepper.Step>
               <Stepper.Step
-                label="Third Step"
-                description="Address info"
+                color="var(--accent-primary)"
+                label="Terzo Step"
+                description="Informazioni di residenza"
                 allowStepSelect={shouldAllowSelectStep(2)}
-              >
-                Address Info
-              </Stepper.Step>
+              ></Stepper.Step>
               <Stepper.Step
-                label="Fourth Step"
-                description="Medical Info"
+                color="var(--accent-primary)"
+                label="Quarto Step"
+                description="Infomazioni mediche"
                 allowStepSelect={shouldAllowSelectStep(3)}
-              >
-                Medical Info
-              </Stepper.Step>
-
-              <Stepper.Completed>
-                Completed, click back button to get to previous step
-              </Stepper.Completed>
+              ></Stepper.Step>
             </Stepper>
 
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-              {active === 0 && <Step1 form={form} />}
-              {active === 1 && <Step2 form={form} />}
-              {active === 2 && <Step3 form={form} />}
-              {active === 3 && <Step4 form={form} />}
+            <form
+              // style={{ border: "1px solid red" }}
+              className={styles.form}
+              onSubmit={form.onSubmit(handleSubmit)}
+            >
+              <div className={styles.fields}>
+                {active === 0 && <Step1 form={form} />}
+                {active === 1 && <Step2 form={form} />}
+                {active === 2 && <Step3 form={form} />}
+                {active === 3 && <Step4 form={form} />}
+              </div>
 
-              <Group justify="center" mt="xl">
+              <div className={styles.buttonGroup}>
                 {active > 0 && (
                   <Button
                     onClick={() => handleStepChange(active - 1)}
-                    className={styles.button}
+                    className="button"
                   >
                     Indietro
                   </Button>
@@ -235,7 +247,7 @@ export default function RegisterPage() {
                 {active < 3 && (
                   <Button
                     onClick={() => handleStepChange(active + 1)}
-                    className={styles.button}
+                    className="button"
                   >
                     Avanti
                   </Button>
@@ -244,15 +256,15 @@ export default function RegisterPage() {
                   <Button
                     type="submit"
                     loading={mutation.isPending}
-                    className={styles.button}
+                    className="button"
                   >
                     Registrati
                   </Button>
                 )}
-              </Group>
+              </div>
             </form>
           </Paper>
-        </Box>
+        </div>
       </div>
     </>
   );

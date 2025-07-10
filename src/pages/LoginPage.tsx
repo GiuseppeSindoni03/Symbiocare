@@ -2,7 +2,7 @@ import { useLoginMutation } from "../hooks/use-login-mutation";
 import { useUser } from "../context/UserContext";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
-import { Divider, PasswordInput, Space, TextInput } from "@mantine/core";
+import { Divider, PasswordInput, Space, Text, TextInput } from "@mantine/core";
 
 import styles from "../styles/Login.module.css";
 
@@ -72,6 +72,7 @@ export default function LoginPage() {
                   </label>
 
                   <TextInput
+                    size="md"
                     placeholder="la-tua@email.com"
                     type="text"
                     leftSection={<Mail size={16} />}
@@ -96,6 +97,7 @@ export default function LoginPage() {
                   </label>
 
                   <PasswordInput
+                    size="md"
                     placeholder="La tua Password"
                     type="password"
                     leftSection={<Lock size={16} />}

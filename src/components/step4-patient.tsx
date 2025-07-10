@@ -1,4 +1,4 @@
-import { Select, TagsInput } from "@mantine/core";
+import { Select, Space, TagsInput } from "@mantine/core";
 import { StepProps } from "../types/patient-registration-form";
 import styles from "../styles/Step.module.css";
 
@@ -7,6 +7,7 @@ export default function Step4({ form }: StepProps) {
     <div className={styles.container}>
       <Select
         className={styles.input}
+        size="lg"
         label="Gruppo sanguigno"
         mt="sm"
         data={["A+", "A-", "B+", "B-", "AB+", "AB-", "0+", "0-"]}
@@ -15,6 +16,7 @@ export default function Step4({ form }: StepProps) {
       />
 
       <TagsInput
+        size="lg"
         className={styles.input}
         label="Patologie"
         mt="sm"
@@ -25,6 +27,7 @@ export default function Step4({ form }: StepProps) {
       />
 
       <TagsInput
+        size="lg"
         className={styles.input}
         label="Farmaci"
         mt="sm"
@@ -35,6 +38,7 @@ export default function Step4({ form }: StepProps) {
       />
 
       <TagsInput
+        size="lg"
         className={styles.input}
         label="Infortuni"
         mt="sm"
@@ -43,6 +47,7 @@ export default function Step4({ form }: StepProps) {
         {...form.getInputProps("injuries")}
         error={form.errors.injuries}
       />
+      <Space h={"lg"} />
     </div>
   );
 }

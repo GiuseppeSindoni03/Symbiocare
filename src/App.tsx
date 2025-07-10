@@ -7,7 +7,8 @@ import Register from "./pages/RegisterPage";
 import AddPatientPage from "./pages/AddPatientPage";
 import PatientPage from "./pages/PatientPage";
 import "@mantine/core/styles.css";
-import { ThemeProvider } from "./context/ThemeContext";
+import "./styles/toast-theme.css";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { useUser } from "./context/UserContext";
 import { Loader } from "lucide-react";
 import PatientsPage from "./pages/PatientsPage";
@@ -18,6 +19,19 @@ import CalendarAvailability from "./pages/CalendarAvailability";
 import CalendarReservations from "./pages/CalendarReservation";
 import DoctorInfo from "./components/doctorInfo";
 import ReservationsRequests from "./pages/ReservationsRequests";
+
+function ThemedToastContainer() {
+  const { colorScheme } = useTheme();
+
+  return (
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      theme={colorScheme === "dark" ? "dark" : "light"}
+      toastClassName={colorScheme === "dark" ? "toast-dark" : "toast-light"}
+    />
+  );
+}
 
 function App() {
   const { isLoading } = useUser();
@@ -68,7 +82,7 @@ function App() {
 
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
-          <ToastContainer position="top-right" autoClose={3000} />
+          <ThemedToastContainer />
         </BrowserRouter>
       </ThemeProvider>
     </>

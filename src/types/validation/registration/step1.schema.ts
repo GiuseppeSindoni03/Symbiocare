@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { passwordSchema } from "../../schemas/password-schema";
+import { checkEmailExists } from "../../../api/auth";
 
 export const step1Schema = z
   .object({
@@ -14,7 +15,11 @@ export const step1Schema = z
     email: z
       .string()
       .nonempty("L'email è obbligatoria.")
-      .email("Email non valida."),
+      .email("Email non valida.")
+      .refine(async (email) => {
+        const response = await checkEmailExists(email);
+        return !response.exist;
+      }),
 
     password: passwordSchema,
 

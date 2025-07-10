@@ -172,9 +172,9 @@ export default function PatientPage() {
             />
           )}
 
-          {patient.patologies.length > 0 && (
+          {patient.pathologies.length > 0 && (
             <InfoCard
-              value={patient.patologies}
+              value={patient.pathologies}
               icon={<Stethoscope />}
               label="Patologie"
             />

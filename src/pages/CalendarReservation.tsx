@@ -2,8 +2,7 @@ import { Calendar, View, Views } from "react-big-calendar";
 import { EventWrapperWithPopover } from "../components/EventWrapperWIthPopover";
 
 import { Loader } from "@mantine/core";
-import styles from "../styles/calendar.module.css";
-import { useMemo, useCallback, useState, useEffect, useRef } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 
 import { ReservationCalendarEvent } from "../types/reservation-calendar-events";
 import { Range, useReservations } from "../hooks/use-reservations";
@@ -137,7 +136,12 @@ export default function CalendarReservations() {
     );
 
   return (
-    <div className={styles.container}>
+    <div
+      style={{
+        width: "100%",
+        minHeight: "100vh",
+      }}
+    >
       <Calendar
         selectable={false}
         date={currentDate}

@@ -7,6 +7,11 @@ interface LoginData {
   password: string;
 }
 
+interface CheckResponse {
+  message: string;
+  exist: boolean;
+}
+
 export async function login({ email, password }: LoginData) {
   const res = await api.post<User>(
     "/auth/signin",
@@ -33,3 +38,30 @@ export async function register(registerInfo: RegisterInfo) {
 
   return res.data;
 }
+export const checkEmailExists = async (
+  email: string
+): Promise<CheckResponse> => {
+  const res = await api.get(`auth/check/email/${email}`, {
+    withCredentials: true,
+  });
+  console.log("Check email response:", res);
+  return res.data;
+};
+
+export const checkCFExists = async (cf: string): Promise<CheckResponse> => {
+  const res = await api.get(`auth/check/cf/${cf}`, {
+    withCredentials: true,
+  });
+  console.log("Check CF response:", res);
+  return res.data;
+};
+
+export const checkPhoneExists = async (
+  phone: string
+): Promise<CheckResponse> => {
+  const res = await api.get(`auth/check/phone/${phone}`, {
+    withCredentials: true,
+  });
+  console.log("Check phone response:", res);
+  return res.data;
+};

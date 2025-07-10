@@ -16,11 +16,13 @@ import { usePatchReservationMutation } from "../hooks/use-patch-reservation.muta
 import styles from "../styles/reservationsRequests.module.css";
 import ReservationRequestCard from "../components/ReservationRequestCard";
 import { CalendarRangeIcon, SearchIcon } from "lucide-react";
+import { useState } from "react";
 
 const ReservationsRequests = () => {
   const { data, isLoading } = useReservations(null, "PENDING");
   const mutation = usePatchReservationMutation();
   const { data: counts } = useReservationCounts();
+  const [searchQuery, setSearchQuery] = useState("");
 
   console.log("Reservations: ", data);
 
@@ -58,6 +60,39 @@ const ReservationsRequests = () => {
     );
   }
 
+  const normalizedQuery = searchQuery.toLowerCase().trim();
+
+  const filteredData = data
+    .map((group) => {
+      const groupDate = new Date(group.date)
+        .toLocaleDateString("it-IT", {
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })
+        .toLowerCase();
+
+      const filteredReservations = group.reservations.filter((r) => {
+        const fullName = `${r.patient.name} ${r.patient.surname}`.toLowerCase();
+        const cf = r.patient.cf?.toLowerCase() ?? "";
+        const type = r.visitType?.toLowerCase() ?? "";
+
+        return (
+          fullName.includes(normalizedQuery) ||
+          cf.includes(normalizedQuery) ||
+          type.includes(normalizedQuery) ||
+          groupDate.includes(normalizedQuery)
+        );
+      });
+
+      return {
+        ...group,
+        reservations: filteredReservations,
+      };
+    })
+    .filter((group) => group.reservations.length > 0);
+
   return (
     <div className={styles.container}>
       <div className={styles.main}>
@@ -74,12 +109,14 @@ const ReservationsRequests = () => {
               leftSection={<SearchIcon size={20} />}
               className={styles.searchInput}
               variant="filled"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.currentTarget.value)}
             ></TextInput>
           </div>
 
           <Space h={"xl"} />
         </div>
-        {data.map((r, index) => (
+        {filteredData.map((r, index) => (
           <div key={index}>
             <Divider
               labelPosition="left"

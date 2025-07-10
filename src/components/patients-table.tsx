@@ -1,6 +1,6 @@
 import { usePatients } from "../hooks/use-patients";
 import { PatientItem } from "../types/patient.interface";
-import { ActionIcon, Box, Loader, Space } from "@mantine/core";
+import { ActionIcon, Box, Group, Loader, Space, Text } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "@mantine/core/styles.css";
@@ -23,7 +23,7 @@ export default function PatientsTable() {
       pageIndex: page - 1,
       pageSize: limit,
     }),
-    [page, limit]
+    [page, limit, search]
   );
 
   const { data, isLoading } = usePatients(page, limit, search);
@@ -62,6 +62,7 @@ export default function PatientsTable() {
 
   const table = useMantineReactTable({
     data: data?.data ?? [],
+
     columns,
     enableRowActions: true,
     enableTopToolbar: false,
@@ -72,10 +73,12 @@ export default function PatientsTable() {
     enableSorting: false,
     positionPagination: "bottom",
     paginationDisplayMode: "pages",
-    rowCount: Number(data?.total) ?? 0,
+    rowCount: data?.total ?? 0,
+
     mantinePaginationProps: {
       showRowsPerPage: false,
     },
+
     state: { pagination },
     onPaginationChange: (pageFn) => {
       const _pagination =
@@ -95,10 +98,7 @@ export default function PatientsTable() {
     renderRowActions: ({ row }) => (
       <Box
         style={(theme) => ({
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: theme.spacing.xs,
+          padding: "8px",
           cursor: "pointer",
           transition: "all 0.2s ease",
           "&:hover": {
@@ -122,6 +122,7 @@ export default function PatientsTable() {
       </Box>
     ),
   });
+
   if (isLoading)
     return (
       <div
@@ -135,6 +136,27 @@ export default function PatientsTable() {
         <Loader size="xl" />
       </div>
     );
+
+  // if (!data || data.data.length === 0) {
+  //   return (
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         height: "100%",
+  //       }}
+  //     >
+  //       <Group>
+  //         <Text size="lg" fw={500}>
+  //           Nessun paziente registrato nel sistema
+  //         </Text>
+  //         <Loader size="sm" />
+  //       </Group>
+  //     </div>
+  //   );
+  // }
+
   return (
     <Box>
       <MantineReactTable table={table} />

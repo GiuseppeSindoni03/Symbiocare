@@ -7,12 +7,14 @@ export default function Step2({ form }: StepProps) {
     <div className={styles.container}>
       <TextInput
         className={styles.input}
+        size="lg"
         label="Codice Fiscale"
         {...form.getInputProps("cf")}
         placeholder="Inserisci il tuo codice fiscale"
       />
       <TextInput
         className={styles.input}
+        size="lg"
         label="Data di nascita"
         mt="sm"
         type="date"
@@ -32,12 +34,14 @@ export default function Step2({ form }: StepProps) {
         placeholder="gg/mm/aaaa"
       /> */}
       <TextInput
+        size="lg"
         label="Telefono"
         {...form.getInputProps("phone")}
         placeholder="Inserisci il tuo numero di telefono"
         className={styles.input}
       />
       <Select
+        size="lg"
         className={styles.input}
         label="Genere"
         placeholder="Inserisci il tuo genere"

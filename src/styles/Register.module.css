@@ -1,59 +1,94 @@
 .container {
+  width: 100wh;
+  height: 100vh;
+  /* border: 1px solid red; */
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  min-height: 100vh;
-  background: var(--bg-primary); /* sfondo coerente con tema dark */
-  color: var(--text-primary);
 }
 
-.stepTitle {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
+.main {
+  width: fit-content;
+  /* border: 1px solid blue; */
+  padding: 40px 100px;
+  /* border: 1px solid blue; */
+  min-width: 1000px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.stepperWrapper {
-  margin-bottom: 2rem;
+.header {
+  /* border: 1px solid green; */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
-.step {
-  color: var(--text-primary); /* testo chiaro */
-}
-
-.button {
-  min-width: 150px;
-  margin: 0 auto;
-  background-color: var(--accent-primary); /* colore principale del tema */
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.button:hover {
-  background-color: var(--accent-secondary);
-  transform: translateY(-1px);
-}
-
-.backButton:hover {
-  transform: scale(1.1);
-  color: var(--text-secondary);
-}
-
-.paper {
-  min-height: 500px;
+.form {
+  /* border: 1px solid magenta; */
+  width: 100%;
+  padding-top: 3em;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: var(--glass-bg); /* effetto vetro */
+  /* align-items: stretch; */
+  /* height: 100%;
+  margin-top: 2em;
+
+  padding-top: 3em; */
+
+  /* border: 1px solid blue; */
+}
+
+.fields {
+  /* border: 1px solid red; */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.backButton:hover {
+  transform: scale(1.4);
+  color: var(--text-secondary);
+}
+
+/* .paper {
+  border: 1px solid yellow;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(20px);
   border-radius: 16px;
   padding: 2rem;
   transition: min-height 0.3s ease, background 0.3s ease;
+} */
+
+.paper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* mette i pulsanti in basso */
+  align-items: center;
+  height: 90vh;
+  width: 100%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.buttonGroup {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
