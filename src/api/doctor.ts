@@ -3,8 +3,10 @@ import { Range } from "../hooks/use-reservations";
 import api from "../services/axiosInstance";
 import { CreateAvailabilityDto } from "../types/create-availabilty.dto";
 import { CreatePatientDto } from "../types/create-patient.dto";
+import { MedicalExaminationDTO } from "../types/medical-examination.dto";
 import { Doctor } from "../types/patient-registration-form";
 import { GroupedReservations, ReservationsDTO } from "../types/reservation";
+import { ReservationItem } from "../types/reservation-item";
 
 export async function fetchDoctor() {
   const res = await api.get<Doctor>("doctor/me", {
@@ -87,6 +89,37 @@ export async function fetchReservations(
     }
   );
 
+  console.log("Prenotazioni", res.data);
+
+  return res.data;
+}
+
+export async function fetchReservationsTable(
+  patient: string | null,
+  page: null | number,
+  limit: null | number,
+  search: null | string
+) {
+  const params = new URLSearchParams();
+
+  if (page) params.append("page", page.toString());
+
+  if (limit) params.append("limit", limit.toString());
+
+  if (search) params.append("search", search);
+
+  params.append("status", "CONFIRMED");
+
+  const res = await api.get<{ total: number; reservations: ReservationItem[] }>(
+    `reservations/${patient}/?${params.toString()}`,
+
+    {
+      withCredentials: true,
+    }
+  );
+
+  console.log("Prenotazioni tabella", res.data);
+
   return res.data;
 }
 
@@ -111,5 +144,18 @@ export async function fetchHowManyReservations() {
   );
 
   console.log("Count ", res.data);
+  return res.data;
+}
+
+export async function addMedicalExamination(
+  medicalExamination: MedicalExaminationDTO,
+  reservationId: string
+) {
+  const res = await api.post<any>(
+    `medical-examination/${reservationId}`,
+    medicalExamination,
+    { withCredentials: true }
+  );
+
   return res.data;
 }

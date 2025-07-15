@@ -1,7 +1,7 @@
 import { Avatar, Divider, Loader, Paper, Text, Title } from "@mantine/core";
 import { useDoctor } from "../hooks/useDoctor";
 import styles from "../styles/doctorPage.module.css";
-import InfoCard from "./InfoCard";
+import InfoCard from "../components/InfoCard";
 import {
   BookUser,
   Building2,
@@ -13,7 +13,7 @@ import {
   VenusAndMars,
 } from "lucide-react";
 import { IconPhone } from "@tabler/icons-react";
-import BackButton from "./BackButton";
+import BackButton from "../components/BackButton";
 export default function DoctorInfo() {
   const { data: doctor, isLoading, isError } = useDoctor();
 
@@ -54,11 +54,17 @@ export default function DoctorInfo() {
         <div className={styles.profileHeader}>
           <Avatar
             size={150}
-            radius="xl"
-            src="doctor.svg"
-            alt="Foto profilo dottore"
+            color={`${
+              doctor.user.gender === "Uomo"
+                ? "cyan"
+                : doctor.user.gender === "Donna"
+                ? "pink"
+                : "gray"
+            }`}
             className={styles.avatar}
-          />
+          >
+            {`${doctor.user?.name[0].toUpperCase()}${doctor.user?.surname[0].toUpperCase()} `}
+          </Avatar>
 
           <div className={styles.nameSection}>
             <Title order={2} fw={700}>

@@ -359,7 +359,6 @@ export default function CalendarAvailability() {
           </div>
         </div>
       </Modal>
-      ;
     </div>
   );
 }

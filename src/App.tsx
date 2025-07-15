@@ -17,8 +17,9 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./styles/custom.calendar.css";
 import CalendarAvailability from "./pages/CalendarAvailability";
 import CalendarReservations from "./pages/CalendarReservation";
-import DoctorInfo from "./components/doctorInfo";
+import DoctorInfo from "./pages/doctorInfo";
 import ReservationsRequests from "./pages/ReservationsRequests";
+import AddMedicalExamination from "./pages/AddMedicalExaminationPage";
 
 function ThemedToastContainer() {
   const { colorScheme } = useTheme();
@@ -74,6 +75,10 @@ function App() {
               <Route
                 path="/reservartions/requests"
                 element={<ReservationsRequests />}
+              />
+              <Route
+                path="/add-examination/:patient"
+                element={<AddMedicalExamination />}
               />
             </Route>
 

@@ -133,8 +133,8 @@ const ReservationsRequests = () => {
               }
             ></Divider>
             <Space h={"lg"} />
-            {r.reservations.map((reservation) => (
-              <>
+            {r.reservations.map((reservation, index) => (
+              <div key={index}>
                 <ReservationRequestCard
                   reservation={reservation}
                   onAccept={mutation.mutate}
@@ -142,7 +142,7 @@ const ReservationsRequests = () => {
                   isLoading={isLoading}
                 />
                 <Space h={"lg"} />
-              </>
+              </div>
             ))}
             <Space h={"lg"} />
           </div>

@@ -10,7 +10,7 @@ import {
   IconUser,
 } from "@tabler/icons-react";
 import { useUser } from "../context/UserContext";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLogoutMutation } from "../hooks/use-logout-mutation";
 import { useDebouncedValue } from "@mantine/hooks";
@@ -110,7 +110,17 @@ export function NavBar() {
                 color="green"
                 withBorder
               >
-                <Avatar radius="xl" size={40} src="doctor.svg" />
+                <Avatar
+                  color={`${
+                    user?.gender === "Uomo"
+                      ? "cyan"
+                      : user?.gender === "Donna"
+                      ? "pink"
+                      : "gray"
+                  }`}
+                >
+                  {`${user?.name[0].toUpperCase()}${user?.surname[0].toUpperCase()} `}
+                </Avatar>
               </Indicator>
               <div className={styles.userInfo}>
                 <Text size="md" fw={1000} className={styles.userName}>

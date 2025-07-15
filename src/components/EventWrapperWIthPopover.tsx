@@ -9,6 +9,8 @@ import {
   Venus,
   NonBinary,
   UserIcon,
+  Icon,
+  CirclePlus,
 } from "lucide-react";
 
 import { ReservationCalendarEvent } from "../types/reservation-calendar-events";
@@ -73,17 +75,24 @@ export const EventWrapperWithPopover: React.FC<Props> = ({
             <Title order={4} className={styles.title}>
               Info prenotazione
             </Title>
+            <Button
+              onClick={() =>
+                navigate(`/add-examination/${selectedEvent?.patient.id}`)
+              }
+            >
+              <CirclePlus size={15} />
+            </Button>
           </div>
 
           <div className={styles.infoPopover}>
-            <Text>
+            <div>
               <Text fw={900}>
                 Tipo di visita <ClipboardPlus size={15} />
               </Text>
               {selectedEvent?.visitType === "CONTROL"
                 ? "Controllo"
                 : "Prima visita"}
-            </Text>
+            </div>
             <Text>
               <Text fw={900}>
                 Data creazione <Calendar1Icon size={15} />
