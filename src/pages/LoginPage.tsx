@@ -57,6 +57,8 @@ export default function LoginPage() {
           <div className={styles.glassCard}>
             <div style={{ marginBottom: "2rem" }}>
               <Logo dimension={"big"} />
+
+              <Space h="lg" />
               <h1 className={styles.pageTitle}>SymbioCare</h1>
               <p className={styles.pageSubTitle}>
                 Accedi al tuo account per continuare

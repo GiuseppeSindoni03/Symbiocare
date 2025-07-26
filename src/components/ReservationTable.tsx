@@ -4,37 +4,21 @@ import {
   useMantineReactTable,
 } from "mantine-react-table";
 import { useCallback, useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  useReservations,
-  useReservationsTable,
-} from "../hooks/use-reservations";
+import { useReservationsTable } from "../hooks/use-reservations";
 import { ReservationItem } from "../types/reservation-item";
-import {
-  ActionIcon,
-  Box,
-  Loader,
-  Text,
-  Group,
-  Modal,
-  TextInput,
-  Button,
-  Textarea,
-} from "@mantine/core";
-import { IconPlus, IconUser } from "@tabler/icons-react";
+import { ActionIcon, Box, Loader, Text, Group, Tooltip } from "@mantine/core";
 import { format } from "date-fns";
-import { CirclePlus, Space } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
-import { useForm } from "@mantine/form";
-import { useAddMedicalExamination } from "../hooks/use-add-medical-examination.mutation";
-import { MedicalExaminationDTO } from "../types/medical-examination.dto";
-import { toast } from "react-toastify";
+
+import AddVisitModal from "./AddMedicalExaminationModal";
 
 type ReservationsTableProps = {
   patient: string;
   search: string;
   page: number;
   limit: number;
+  onSuccess: () => void;
   onPaginationChange: (params: { page: number; limit: number }) => void;
 };
 
@@ -43,31 +27,24 @@ export default function ReservationsTable({
   search,
   page,
   limit,
+  onSuccess,
   onPaginationChange,
 }: ReservationsTableProps) {
-  const navigate = useNavigate();
-
+  // Prenotazione selezionata
   const [selectedReservationId, setSelectedReservationId] = useState<
-    string | null
-  >(null);
+    string | undefined
+  >(undefined);
 
+  // Gestione chiusura/apertura Modal per visita
   const [opened, handler] = useDisclosure(false);
 
-  const mutation = useAddMedicalExamination();
-
+  // Get delle prenotazioni
   const { data, isLoading } = useReservationsTable(
     patient,
     page,
     limit,
     search
   );
-
-  const form = useForm({
-    initialValues: {
-      note: "",
-      motivation: "",
-    },
-  });
 
   const pagination = useMemo(
     () => ({
@@ -77,10 +54,10 @@ export default function ReservationsTable({
     [page, limit, search]
   );
 
+  // Gestione chiusra Modal
   const handleModalClose = useCallback(() => {
     handler.close();
-    form.reset();
-  }, [handler, form]);
+  }, [handler]);
 
   const handlePaginationChange = useCallback(
     (pageFn: any) => {
@@ -162,60 +139,24 @@ export default function ReservationsTable({
     onPaginationChange: handlePaginationChange,
     renderRowActions: ({ row }) => (
       <Box
-        // style={(theme) => ({
-        //   padding: "8px",
-        //   cursor: "pointer",
-        //   transition: "all 0.2s ease",
-        //   "&:hover": {
-        //     transform: "translateY(-1px)",
-        //     opacity: 0.85,
-        //   },
-        // })}
         onClick={() => {
           setSelectedReservationId(row.original.id);
           handler.open();
         }}
       >
-        <ActionIcon
-          variant="subtle"
-          color="var(--accent-primary)"
-          radius="xl"
-          size="lg"
-        >
-          <CirclePlus size={22} />
-        </ActionIcon>
+        <Tooltip label="Aggiungi report visita" withArrow>
+          <ActionIcon
+            variant="subtle"
+            color="var(--accent-primary)"
+            radius="xl"
+            size="lg"
+          >
+            <CirclePlus size={22} />
+          </ActionIcon>
+        </Tooltip>
       </Box>
     ),
   });
-
-  const handleSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-
-      if (!selectedReservationId) {
-        toast.error("Nessuna prenotazione selezionata");
-        return;
-      }
-
-      mutation.mutate(
-        {
-          medicalExamination: form.values,
-          reservationId: selectedReservationId,
-        },
-        {
-          onSuccess: () => {
-            toast.success("Visita medica inserita con successo");
-            handler.close();
-            form.reset();
-          },
-          onError: (error) => {
-            toast.error("Errore nell'aggiunta della visita: " + String(error));
-          },
-        }
-      );
-    },
-    [form, handler, mutation, selectedReservationId]
-  );
 
   if (isLoading)
     return (
@@ -254,84 +195,12 @@ export default function ReservationsTable({
   return (
     <Box>
       <MantineReactTable table={table} />
-      <Modal
+      <AddVisitModal
+        onClose={handleModalClose}
         opened={opened}
-        onClose={handler.close}
-        title={null} // titolo custom dentro il body
-        size="auto"
-        radius="md"
-        overlayProps={{
-          backgroundOpacity: 0.55,
-          blur: 3,
-        }}
-        centered
-      >
-        <div style={{ textAlign: "center", padding: "1.5rem" }}>
-          <h2
-            style={{
-              marginBottom: "0.5rem",
-              fontSize: "1.5rem",
-              color: "var(--text-primary)",
-            }}
-          >
-            Aggiungi visita medica
-          </h2>
-          <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem" }}>
-            Inserisci il report della visita medica
-          </p>
-
-          <div>
-            <form onSubmit={handleSubmit}>
-              <TextInput
-                size="lg"
-                {...form.getInputProps("motivation")}
-                placeholder="Inserisci la motivazione della visita"
-                w={"400px"}
-                style={{ marginBottom: "1rem" }}
-                required
-              />
-              <Textarea
-                size="lg"
-                {...form.getInputProps("note")}
-                placeholder="Inserisci le note della visita"
-                w={"400px"}
-                style={{ marginBottom: "1rem" }}
-                required
-              />
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.5rem",
-                  justifyContent: "center",
-                }}
-              >
-                <Button
-                  type="submit"
-                  loading={mutation.isPending}
-                  className="button"
-                  // disabled={}
-                >
-                  Aggiungi
-                </Button>
-                {/* <Space w={"xl"} /> */}
-                <Button
-                  className="button"
-                  onClick={handleModalClose}
-                  disabled={mutation.isPending}
-                >
-                  Annulla
-                </Button>
-              </div>
-            </form>
-          </div>
-
-          <div style={{ marginTop: "2rem" }}>
-            <button onClick={handler.close} className="button">
-              Chiudi
-            </button>
-          </div>
-        </div>
-      </Modal>
+        onSuccess={onSuccess}
+        reservationId={selectedReservationId}
+      />
     </Box>
   );
 }

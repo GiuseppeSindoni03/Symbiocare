@@ -3,6 +3,7 @@ import { Range } from "../hooks/use-reservations";
 import api from "../services/axiosInstance";
 import { CreateAvailabilityDto } from "../types/create-availabilty.dto";
 import { CreatePatientDto } from "../types/create-patient.dto";
+import { MedicalDetectionType } from "../types/medical-detection-type";
 import { MedicalExaminationDTO } from "../types/medical-examination.dto";
 import { Doctor } from "../types/patient-registration-form";
 import { GroupedReservations, ReservationsDTO } from "../types/reservation";
@@ -155,6 +156,30 @@ export async function addMedicalExamination(
     `medical-examination/${reservationId}`,
     medicalExamination,
     { withCredentials: true }
+  );
+
+  return res.data;
+}
+
+export async function getMedicalDetections(
+  patientId: string,
+  type: MedicalDetectionType,
+  startDate: string | undefined,
+  endDate: string | undefined
+) {
+  const params = new URLSearchParams();
+
+  if (type) params.append("type", type.toString());
+
+  // if (startDate) params.append("startDate", startDate);
+
+  // if (endDate) params.append("endDate", endDate);
+
+  const res = await api.get(
+    `medical-detection/patient/${patientId}?${params.toString()}`,
+    {
+      withCredentials: true,
+    }
   );
 
   return res.data;

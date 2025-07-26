@@ -1,12 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { usePatient } from "../hooks/use-patients";
 import {
   Avatar,
+  Box,
   Button,
   Divider,
   Loader,
   Modal,
   Paper,
+  Space,
   Title,
 } from "@mantine/core";
 import { IconPhone, IconQrcode, IconUser } from "@tabler/icons-react";
@@ -16,6 +18,7 @@ import InfoCard from "../components/InfoCard";
 import {
   Accessibility,
   Building2,
+  CirclePlus,
   Droplet,
   HeartPulse,
   House,
@@ -32,9 +35,12 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import QRCode from "react-qr-code";
 import BackButton from "../components/BackButton";
+import { MedicalDetection } from "../components/MedicalDetection";
+import { MedicalDetectionType } from "../types/medical-detection-type";
 
 export default function PatientPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   console.log("Id pazient: ", id);
   if (!id) {
@@ -66,7 +72,7 @@ export default function PatientPage() {
   return (
     <div className={styles.container}>
       <Paper radius="md" p="md" className={styles.header}>
-        <BackButton position="static" />
+        <BackButton position="static" path="/patients" />
 
         <div className={styles.profileHeader}>
           <Avatar
@@ -81,16 +87,32 @@ export default function PatientPage() {
             <Title order={2} fw={700}>
               {patient.user.name} {patient.user.surname}
             </Title>
-            {patient.user.inviteId && (
-              <Button
-                leftSection={<IconQrcode size={16} />}
-                onClick={handler.open}
-                mt="xs"
-                className="button"
-              >
-                QR di invito
-              </Button>
-            )}
+
+            <div className={styles.buttonSection}>
+              {patient.user.inviteId ? (
+                <>
+                  <Button
+                    leftSection={<IconQrcode size={16} />}
+                    onClick={handler.open}
+                    mt="xs"
+                    className="button"
+                  >
+                    QR di invito
+                  </Button>
+
+                  <Space w={"sm"} />
+                </>
+              ) : (
+                <Button
+                  leftSection={<CirclePlus size={16} />}
+                  onClick={() => navigate(`/add-examination/${patient.id}`)}
+                  mt="xs"
+                  className="button"
+                >
+                  Aggiungi visita
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -233,6 +255,38 @@ export default function PatientPage() {
             </div>
           </div>
         </Modal>
+
+        <Title order={3} mt="xl" mb="sm">
+          Rilevazioni parametri{" "}
+        </Title>
+        <Divider mb="md" />
+
+        <div className={styles.medicalDetections}>
+          <MedicalDetection
+            type={MedicalDetectionType.SPO2}
+            patientId={patient.id}
+            endDate={undefined}
+            startDate={undefined}
+          />
+          <MedicalDetection
+            type={MedicalDetectionType.HR}
+            patientId={patient.id}
+            endDate={undefined}
+            startDate={undefined}
+          />
+          <MedicalDetection
+            type={MedicalDetectionType.TEMP}
+            patientId={patient.id}
+            endDate={undefined}
+            startDate={undefined}
+          />
+          <MedicalDetection
+            type={MedicalDetectionType.WEIGHT}
+            patientId={patient.id}
+            endDate={undefined}
+            startDate={undefined}
+          />
+        </div>
       </Paper>
     </div>
   );

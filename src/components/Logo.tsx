@@ -9,7 +9,7 @@ export default function Logo({ dimension = "small" }) {
     <div className={`${styles.container} ${containerSizeClass}`}>
       <img
         className={`${styles.logo} ${sizeClass}`}
-        src="/logo2.svg"
+        src="/logov2.svg"
         alt="Logo di SymbioCare"
       />
 

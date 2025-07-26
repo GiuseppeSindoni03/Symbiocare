@@ -13,6 +13,18 @@
   margin-bottom: 2rem;
 }
 
+.nameSection {
+  display: flex;
+  align-items: center;
+}
+
+.buttonSection {
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .avatar {
   flex-shrink: 0;
   background-color: var(--mantine-color-blue-0);
@@ -31,4 +43,14 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
   margin-top: 1rem;
+}
+
+.medicalDetections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 1em;
+  /* max-width: 1200px; */
+  margin: 0 auto;
 }

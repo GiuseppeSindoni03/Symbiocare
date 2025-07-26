@@ -1,16 +1,23 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ReservationsTable from "../components/ReservationTable";
 import { useCallback } from "react";
 import styles from "../styles/addMedicalExaminationPage.module.css";
-import { Text } from "@mantine/core";
+import { Title } from "@mantine/core";
 
 export default function AddMedicalExamination() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { patient } = useParams<{ patient: string }>();
 
+  const navigate = useNavigate();
+
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = parseInt(searchParams.get("limit") || "12", 10);
   const search = searchParams.get("search") || "";
+
+  const onSuccess = useCallback(() => {
+    console.log(`Sto navigando a patients/${patient}`);
+    navigate(`/patients/${patient}`);
+  }, []);
 
   const handlePaginationChange = useCallback(
     ({ page: newPage, limit: newLimit }: { page: number; limit: number }) => {
@@ -34,12 +41,16 @@ export default function AddMedicalExamination() {
 
   return (
     <div className={styles.container}>
+      <Title className={styles.title} order={1}>
+        Seleziona la prenotazione
+      </Title>
       <ReservationsTable
         patient={patient}
         search={search}
         page={page}
         limit={limit}
         onPaginationChange={handlePaginationChange}
+        onSuccess={onSuccess}
       />
     </div>
   );

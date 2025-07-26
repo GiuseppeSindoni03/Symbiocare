@@ -1,13 +1,17 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
 type BackButtonProps = {
   position?: "absolute" | "static";
+  path: string | undefined;
 };
 
-const BackButton: FC<BackButtonProps> = ({ position = "absolute" }) => {
+const BackButton: FC<BackButtonProps> = ({
+  position = "absolute",
+  path = undefined,
+}) => {
   const navigate = useNavigate();
 
   const sharedStyle: React.CSSProperties = {
@@ -24,6 +28,11 @@ const BackButton: FC<BackButtonProps> = ({ position = "absolute" }) => {
     zIndex: 100,
   };
 
+  const handleNavigate = useCallback(() => {
+    if (path) navigate(path);
+    else navigate(-1);
+  }, [path]);
+
   return (
     <Tooltip label="Torna indietro" position="bottom" withArrow>
       <ActionIcon
@@ -31,7 +40,7 @@ const BackButton: FC<BackButtonProps> = ({ position = "absolute" }) => {
         color="indigo"
         radius="xl"
         size="lg"
-        onClick={() => navigate(-1)}
+        onClick={handleNavigate}
         style={{
           ...sharedStyle,
 

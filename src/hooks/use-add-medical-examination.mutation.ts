@@ -5,7 +5,7 @@ import { addMedicalExamination, addPatient } from "../api/doctor";
 import { useNavigate } from "react-router-dom";
 import { MedicalExaminationDTO } from "../types/medical-examination.dto";
 
-export const useAddMedicalExamination = () => {
+export const useAddMedicalExamination = (onSuccess: () => void) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -25,6 +25,8 @@ export const useAddMedicalExamination = () => {
 
       console.log("Success");
       toast.success("Visita medica inserita con successo");
+
+      onSuccess();
     },
     onError: (error: AxiosError<any>) => {
       let message = error?.response?.data?.message || "Errore sconosciuto";

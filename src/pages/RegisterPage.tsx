@@ -126,29 +126,6 @@ export default function RegisterPage() {
   const shouldAllowSelectStep = (step: number) =>
     highestStepVisited >= step && active !== step;
 
-  // const form = useForm({
-  //   initialValues: {
-  //     name: "Giuseppe",
-  //     surname: "Sindoni",
-  //     email: "giuseppe2@example.com",
-  //     password: "Giuseppe2#",
-  //     confirmPassword: "Giuseppe2#",
-  //     cf: "TNSNVN35M44L327Z",
-  //     birthDate: "1985-02-08",
-  //     phone: "351123456",
-  //     gender: "Uomo",
-  //     address: "Via Roma 25",
-  //     city: "Napoli",
-  //     cap: "80100",
-  //     province: "NA",
-  //     medicalOffice: "Studio Medico Porricelli",
-  //     registrationNumber: "NA987654",
-  //     orderProvince: "NA",
-  //     orderDate: "2012-07-01",
-  //     orderType: "Ordine dei Medici Chirurghi",
-  //     specialization: "Neurologia",
-  //   },
-  // });
   const form = useForm({
     initialValues: {
       name: "",
@@ -175,7 +152,7 @@ export default function RegisterPage() {
 
   return (
     <>
-      <BackButton position="absolute" />
+      <BackButton position="absolute" path={undefined} />
       <ThemeToggle />
 
       <div className={styles.container}>
