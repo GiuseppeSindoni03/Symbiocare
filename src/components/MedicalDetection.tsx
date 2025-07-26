@@ -2,7 +2,16 @@ import { addDays, format } from "date-fns";
 import { useMedicalDetection } from "../hooks/use-medical-detection";
 import { MedicalDetectionType } from "../types/medical-detection-type";
 import { useCallback, useEffect, useMemo } from "react";
-import { LineChart } from "@mantine/charts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
 import { Box, Space, Title } from "@mantine/core";
 import styles from "../styles/medicalDetectionChart.module.css";
 
@@ -77,26 +86,73 @@ export function MedicalDetection({
 
   console.log(`Rilevazioni ${detectionLabel}`, detections);
 
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          }}
+        >
+          <p style={{ margin: 0, fontWeight: "bold" }}>{`Data: ${label}`}</p>
+          <p style={{ margin: 0, color: detectionColor }}>
+            {`${detectionLabel}: ${payload[0].value} ${detectionUnit}`}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       <div className={styles.container}>
         <Title order={4} mt="xl" mb="sm">
           {detectionLabel}
         </Title>
-        <LineChart
-          h={400}
-          className={styles.chart}
-          data={chartData}
-          dataKey="date"
-          series={[
-            { name: "value", label: detectionLabel, color: detectionColor },
-          ]}
-          curveType="linear"
-          connectNulls
-          unit={` ${detectionUnit}`}
-          // withTooltip={true}
-        />
+        <ResponsiveContainer width="100%" height={400}>
+          <LineChart
+            data={chartData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 12 }}
+              angle={-45}
+              textAnchor="end"
+              height={80}
+            />
+            <YAxis
+              tick={{ fontSize: 12 }}
+              label={{
+                value: detectionUnit,
+                angle: -90,
+                position: "insideLeft",
+              }}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Line
+              type="monotone"
+              dataKey="value"
+              stroke={detectionColor}
+              strokeWidth={2}
+              dot={{ fill: detectionColor, strokeWidth: 2, r: 4 }}
+              activeDot={{ r: 6 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
+      {/* <Space h={"lg"} /> */}
     </>
   );
 }
