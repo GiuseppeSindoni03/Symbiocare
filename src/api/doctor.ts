@@ -5,6 +5,7 @@ import { CreateAvailabilityDto } from "../types/create-availabilty.dto";
 import { CreatePatientDto } from "../types/create-patient.dto";
 import { MedicalDetectionType } from "../types/medical-detection-type";
 import { MedicalExaminationDTO } from "../types/medical-examination.dto";
+import { MedicalExaminationsResponse } from "../types/medicalExaminationResponse.interface";
 import { Doctor } from "../types/patient-registration-form";
 import { GroupedReservations, ReservationsDTO } from "../types/reservation";
 import { ReservationItem } from "../types/reservation-item";
@@ -183,4 +184,31 @@ export async function getMedicalDetections(
   );
 
   return res.data;
+}
+
+export async function getMedicalExaminations(
+  patientId: string,
+  limit: number = 3,
+  cursor: string | undefined
+): Promise<MedicalExaminationsResponse> {
+  const params = new URLSearchParams();
+
+  if (limit) params.append("limit", limit.toString());
+
+  if (cursor) params.append("cursor", cursor);
+
+  const res = await api.get<MedicalExaminationsResponse>(
+    `medical-examination/${patientId}/?${params.toString()}`,
+    {
+      withCredentials: true,
+    }
+  );
+
+  const parsed: MedicalExaminationsResponse = res.data;
+
+  console.log("🔍 Risposta API ricevuta:", parsed);
+  console.log("🔍 Tipo di parsed:", typeof parsed);
+  console.log("🔍 parsed.pagination esiste?", !!parsed.pagination);
+
+  return parsed; // ✅ restituisci solo res.data!
 }

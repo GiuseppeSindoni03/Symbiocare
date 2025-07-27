@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { usePatient } from "../hooks/use-patients";
 import {
+  Accordion,
   Avatar,
   Box,
   Button,
@@ -17,11 +18,15 @@ import styles from "../styles/PatientPage.module.css";
 import InfoCard from "../components/InfoCard";
 import {
   Accessibility,
+  Activity,
   Building2,
   CirclePlus,
   Droplet,
+  FileText,
   HeartPulse,
+  Hospital,
   House,
+  Icon,
   IdCard,
   Mail,
   MapPin,
@@ -35,8 +40,8 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import QRCode from "react-qr-code";
 import BackButton from "../components/BackButton";
-import { MedicalDetection } from "../components/MedicalDetection";
-import { MedicalDetectionType } from "../types/medical-detection-type";
+import MedicalDetections from "../components/MedicalDetections";
+import MedicalExaminations from "../components/MedicalExaminations";
 
 export default function PatientPage() {
   const { id } = useParams<{ id: string }>();
@@ -69,11 +74,33 @@ export default function PatientPage() {
 
   console.log("Paziente: ", patient);
 
+  // const items = [
+  //   <Accordion.Item key={patient.id} value="Rilevazioni mediche">
+  //     <Accordion.Control icon={<Activity size={24} />}>
+  //       <Title order={4} mt="xl" mb="sm">
+  //         Rilevazioni parametri{" "}
+  //       </Title>{" "}
+  //     </Accordion.Control>
+  //     <Accordion.Panel>
+  //       <MedicalDetections patientId={patient?.id} />
+  //     </Accordion.Panel>
+  //   </Accordion.Item>,
+  //   // <Accordion.Item key={2} value="Visite mediche">
+  //   //   <Accordion.Control icon={<Hospital size={24} />}>
+  //   //     <Title order={4} mt="xl" mb="sm">
+  //   //       Visite mediche{" "}
+  //   //     </Title>{" "}
+  //   //   </Accordion.Control>
+  //   //   <Accordion.Panel>
+  //   //     <LazyMedicalExaminations patientId={patient.id} />
+  //   //   </Accordion.Panel>
+  //   // </Accordion.Item>,
+  // ];
+
   return (
     <div className={styles.container}>
       <Paper radius="md" p="md" className={styles.header}>
         <BackButton position="static" path="/patients" />
-
         <div className={styles.profileHeader}>
           <Avatar
             size={120}
@@ -115,12 +142,10 @@ export default function PatientPage() {
             </div>
           </div>
         </div>
-
         <Title order={3} mt="xl" mb="sm">
           Informazioni personali{" "}
         </Title>
         <Divider mb="md" />
-
         <div className={styles.userInfoGrid}>
           <InfoCard
             value={patient.user.cf}
@@ -150,7 +175,6 @@ export default function PatientPage() {
           />
           <InfoCard value={patient.user.cap} icon={<MapPin />} label="CAP" />
         </div>
-
         <Title order={3} mt="xl" mb="sm">
           Informazioni mediche{" "}
         </Title>
@@ -202,7 +226,6 @@ export default function PatientPage() {
             />
           )}
         </div>
-
         <Modal
           opened={opened}
           onClose={handler.close}
@@ -255,39 +278,23 @@ export default function PatientPage() {
             </div>
           </div>
         </Modal>
-
         <Title order={3} mt="xl" mb="sm">
-          Rilevazioni parametri{" "}
+          Altro{" "}
         </Title>
         <Divider mb="md" />
-
-        <div className={styles.medicalDetections}>
-          <MedicalDetection
-            type={MedicalDetectionType.SPO2}
-            patientId={patient.id}
-            endDate={undefined}
-            startDate={undefined}
-          />
-          <MedicalDetection
-            type={MedicalDetectionType.HR}
-            patientId={patient.id}
-            endDate={undefined}
-            startDate={undefined}
-          />
-          <MedicalDetection
-            type={MedicalDetectionType.TEMP}
-            patientId={patient.id}
-            endDate={undefined}
-            startDate={undefined}
-          />
-          <MedicalDetection
-            type={MedicalDetectionType.WEIGHT}
-            patientId={patient.id}
-            endDate={undefined}
-            startDate={undefined}
-          />
-        </div>
+        <Title order={4} mt="xl" mb="sm">
+          Visite mediche{" "}
+        </Title>{" "}
+        <MedicalExaminations patientId={patient.id} />
+        {/* <Accordion variant="separated" radius={"md"} multiple>
+          {items}
+        </Accordion> */}
       </Paper>
     </div>
   );
 }
+
+// const LazyMedicalExaminations = ({ patientId }: { patientId: string }) => {
+//   console.log("LazyMedicalExaminations rendered with patientId:", patientId);
+//   return <MedicalExaminations patientId={patientId} />;
+// };

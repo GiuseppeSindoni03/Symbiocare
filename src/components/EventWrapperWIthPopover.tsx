@@ -80,7 +80,7 @@ export const EventWrapperWithPopover: React.FC<Props> = ({
   }, [opened, isOpen]);
 
   return (
-    <div ref={popoverRef}>
+    <div>
       <Popover
         opened={isOpen}
         onClose={
@@ -96,7 +96,7 @@ export const EventWrapperWithPopover: React.FC<Props> = ({
       >
         <Popover.Target>{cloned}</Popover.Target>
         <Popover.Dropdown onClick={handlePopoverClick}>
-          <div>
+          <div ref={popoverRef}>
             <div className={styles.headerPopover}>
               <Title order={4} className={styles.title}>
                 Info prenotazione
@@ -106,7 +106,8 @@ export const EventWrapperWithPopover: React.FC<Props> = ({
                 <Button
                   onClick={() => {
                     console.log("Button clicked, opening modal");
-                    handler.open();
+                    // handler.open();
+                    setTimeout(() => handler.open(), 0);
                   }}
                   variant="subtle"
                   size="xs"
@@ -126,9 +127,7 @@ export const EventWrapperWithPopover: React.FC<Props> = ({
                   : "Prima visita"}
               </div>
               <Text>
-                <h4>
-                  Data creazione <Calendar1Icon size={15} />
-                </h4>
+                Data creazione <Calendar1Icon size={15} />
                 {selectedEvent?.createdAt
                   ? new Date(selectedEvent.createdAt).toLocaleDateString(
                       "it-IT",
@@ -214,7 +213,7 @@ export const EventWrapperWithPopover: React.FC<Props> = ({
           handler.close();
           // setSelectedEvent(undefined);
         }}
-        onSubmit={() => {
+        onSuccess={() => {
           handler.close();
           // setSelectedEvent(undefined);
         }}

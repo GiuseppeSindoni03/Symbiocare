@@ -3,6 +3,7 @@ import ReservationsTable from "../components/ReservationTable";
 import { useCallback } from "react";
 import styles from "../styles/addMedicalExaminationPage.module.css";
 import { Title } from "@mantine/core";
+import BackButton from "../components/BackButton";
 
 export default function AddMedicalExamination() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,9 +42,16 @@ export default function AddMedicalExamination() {
 
   return (
     <div className={styles.container}>
-      <Title className={styles.title} order={1}>
-        Seleziona la prenotazione
-      </Title>
+      <div className={styles.header}>
+        <BackButton
+          position="static"
+          path={`/patients/${patient}`}
+        ></BackButton>
+        <Title className={styles.title} order={1}>
+          Seleziona la prenotazione
+        </Title>
+      </div>
+
       <ReservationsTable
         patient={patient}
         search={search}
