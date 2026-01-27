@@ -1,8 +1,3 @@
-Ecco il codice completo in un unico blocco. Ho sistemato i blocchi di codice, la gerarchia delle cartelle e la formattazione per renderlo professionale su GitHub.
-
-Ti basta cliccare sull'icona di copia in alto a destra del blocco qui sotto:
-
-Markdown
 # SymbioCare - Frontend (Web)
 
 ## Project Overview
