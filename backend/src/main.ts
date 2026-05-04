@@ -13,15 +13,12 @@ async function bootstrap() {
     next();
   });
 
+
   app.enableCors({
     origin: [
-      'http://localhost:5173',
+      'https://symbiocare-frontend-gpatb9g6eyd9fpae.swedencentral-01.azurewebsites.net',
       'http://localhost:4200',
-      'http://192.168.1.16:4200',
-      'http://192.168.1.16',
-      'http://10.175.124.71:4200',
     ],
-
     credentials: true,
   });
 
