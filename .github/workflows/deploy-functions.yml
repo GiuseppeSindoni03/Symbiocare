@@ -1,4 +1,4 @@
-name: Deploy Azure Functions
+name: Deploy Azure Functions (Flex Consumption)
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -20,19 +20,19 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install Azure Functions Core Tools
+        run: |
+          npm install -g azure-functions-core-tools@4 --unsafe-perm true
+
       - name: Install dependencies
         working-directory: azure-functions
         run: npm install
 
-      - name: Archive production artifacts
-        working-directory: azure-functions
+      - name: Publish to Azure
         run: |
-          mkdir -p ../package
-          zip -r ../package/functionapp.zip .
-
-      - name: Deploy to Azure Functions
-        uses: azure/functions-action@v1
-        with:
-          app-name: symbiocare-function-app
-          package: package/functionapp.zip
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          func azure functionapp publish symbiocare-function-app \
+            --typescript \
+            --nozip \
+            --build remote
+        env:
+          AZURE_FUNCTIONAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
