@@ -19,10 +19,10 @@ export class MedicalExamination {
   @Column()
   date: Date;
 
-  @Column()
+  @Column({nullable: true})
   motivation: string;
 
-  @Column()
+  @Column({nullable: true})
   note: string;
 
   @ManyToOne(() => Patient, (patient) => patient.medicalExaminations, {

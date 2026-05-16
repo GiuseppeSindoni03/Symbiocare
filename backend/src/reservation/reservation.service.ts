@@ -27,6 +27,7 @@ import {
 import { UserItem } from 'src/common/types/userItem';
 import { ReservationResponse } from './dto/reservation-response.dto';
 import { MedicalExamination } from 'src/medical-examination/medical-examination.entity';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class ReservationService {
@@ -42,6 +43,8 @@ export class ReservationService {
 
     @InjectRepository(Patient)
     private readonly patientRepository: Repository<Patient>,
+
+    private readonly notificationService: NotificationService,
   ) { }
 
   async isFirstVisit(patient: Patient) {
@@ -378,7 +381,7 @@ export class ReservationService {
       );
     }
 
-    return this.createReservationCore({
+    const reservation = await this.createReservationCore({
       doctor,
       patient,
       startTime: dto.startTime,
@@ -386,6 +389,15 @@ export class ReservationService {
       visitType: dto.visitType,
       status: ReservationStatus.CONFIRMED,
     });
+
+    // Notifica al paziente: appuntamento creato dal dottore
+    this.notificationService
+      .notifyAppointmentCreated(reservation)
+      .catch((err) =>
+        console.error('Errore invio notifica appointment_created:', err),
+      );
+
+    return reservation;
   }
 
 
@@ -405,7 +417,16 @@ export class ReservationService {
 
     reservation.status = ReservationStatus.CONFIRMED;
 
-    return await this.reservationRepository.save(reservation);
+    const saved = await this.reservationRepository.save(reservation);
+
+    // Notifica al paziente: prenotazione accettata
+    this.notificationService
+      .notifyReservationAccepted(saved)
+      .catch((err) =>
+        console.error('Errore invio notifica reservation_accepted:', err),
+      );
+
+    return saved;
   }
 
   async declineReservation(reservationId: string, doctor: Doctor) {
@@ -419,7 +440,16 @@ export class ReservationService {
 
     reservation.status = ReservationStatus.DECLINED;
 
-    return await this.reservationRepository.save(reservation);
+    const saved = await this.reservationRepository.save(reservation);
+
+    // Notifica al paziente: prenotazione rifiutata
+    this.notificationService
+      .notifyReservationDeclined(saved)
+      .catch((err) =>
+        console.error('Errore invio notifica reservation_declined:', err),
+      );
+
+    return saved;
   }
 
   async getReservationSlots(

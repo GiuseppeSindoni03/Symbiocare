@@ -12,6 +12,8 @@ import { ReservationModule } from './reservation/reservation.module';
 import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { MedicalDetectionModule } from './medical-detection/medical-detection.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ScheduleModule } from '@nestjs/schedule';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -52,6 +54,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
     ReservationModule,
     MedicalDetectionModule,
     ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
+    ScheduleModule.forRoot(),
+    NotificationModule,
   ],
   controllers: [],
 })

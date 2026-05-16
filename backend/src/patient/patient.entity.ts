@@ -25,7 +25,7 @@ export class Patient {
   @Column({ type: 'float' })
   height: number;
 
-  @Column()
+  @Column({ nullable: true })
   bloodType: string;
 
   @Column({
@@ -35,16 +35,16 @@ export class Patient {
   })
   level: PatientLevel;
 
-  @Column()
+  @Column({ nullable: true })
   sport: string;
 
-  @Column('text', { array: true })
+  @Column('text', { array: true, default: '{}' })
   pathologies: string[];
 
-  @Column('text', { array: true })
+  @Column('text', { array: true, default: '{}' })
   medications: string[];
 
-  @Column('text', { array: true })
+  @Column('text', { array: true, default: '{}' })
   injuries: string[];
 
   @OneToMany(() => Reservation, (reservation) => reservation.doctor)

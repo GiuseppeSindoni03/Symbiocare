@@ -142,7 +142,7 @@ export class AuthService {
       const challengeId = uuid();
       const challenge = this.challengeRepository.create({
         challengeId,
-        userId: user.id,
+        user: user,
         type: 'LOGIN_2FA',
         expiresAt: addMinutes(new Date(), 5),
         attempts: 0,
@@ -213,7 +213,7 @@ export class AuthService {
     }
 
     const user = await this.userRepository.findOne({
-      where: { id: challenge.userId },
+      where: { id: challenge.user.id },
     });
     // Ensure twoFactorSecret is present and verify
     if (!user || !user.twoFactorSecret) {

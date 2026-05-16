@@ -1,28 +1,31 @@
+import { User } from 'src/user/user.entity';
 import {
     BaseEntity,
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
+    ManyToOne,
     PrimaryGeneratedColumn,
     Unique,
 } from 'typeorm';
 
 @Entity()
-@Unique(['challengeId'])
 export class AuthChallenge extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
+    @Column({ default: '' })
     challengeId: string;
 
-    @Column()
-    userId: string;
+    @ManyToOne(() => User, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'userId' })
+    user: User;
 
-    @Column()
+    @Column({default: "LOGIN_2FA"})
     type: string; // "LOGIN_2FA"
 
-    @Column()
+    @Column({nullable: true})
     expiresAt: Date;
 
     @Column({ default: 0 })
@@ -31,6 +34,6 @@ export class AuthChallenge extends BaseEntity {
     @Column({ default: 5 })
     maxAttempts: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({nullable: true})
     createdAt: Date;
 }

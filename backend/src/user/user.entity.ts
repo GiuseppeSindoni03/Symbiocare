@@ -1,3 +1,4 @@
+import { Gender } from 'src/auth/dto/gender-enum';
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
@@ -24,7 +25,7 @@ export class User {
   @Column({ type: 'date' })
   birthDate: Date;
 
-  @Column()
+  @Column({default: Gender.Altro})
   gender: string;
 
   @Column()
