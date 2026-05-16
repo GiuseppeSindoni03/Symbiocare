@@ -7,6 +7,7 @@ import { Availability } from 'src/availability/availability.entity';
 import { Doctor } from 'src/doctor/doctor.entity';
 import { Patient } from 'src/patient/patient.entity';
 import { VisitType } from './visit-type.entity';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
   controllers: [ReservationController],
@@ -19,6 +20,7 @@ import { VisitType } from './visit-type.entity';
       Patient,
       VisitType,
     ]),
+    NotificationModule,
   ],
 })
 export class ReservationModule {}

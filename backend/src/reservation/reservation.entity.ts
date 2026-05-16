@@ -9,7 +9,7 @@ export class Reservation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'enum', enum: ReservationStatus })
+  @Column({ type: 'enum', enum: ReservationStatus, default: ReservationStatus.PENDING})
   status: ReservationStatus;
 
   @Column({ type: 'timestamptz' })
@@ -31,4 +31,7 @@ export class Reservation {
 
   @ManyToOne(() => VisitType, { eager: true })
   visitType: VisitType;
+
+  @Column({ default: false })
+  reminderSent: boolean;
 }

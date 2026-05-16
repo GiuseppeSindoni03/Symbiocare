@@ -17,22 +17,22 @@ export class Doctor {
   @PrimaryColumn('uuid')
   userId: string;
 
-  @Column()
+  @Column({nullable: true})
   specialization: string;
 
-  @Column()
+  @Column({nullable: true})
   medicalOffice: string;
 
-  @Column()
+  @Column({nullable: true})
   registrationNumber: string;
 
-  @Column()
+  @Column({nullable: true})
   orderProvince: string;
 
   @Column({ type: 'date' })
   orderDate: Date;
 
-  @Column()
+  @Column({nullable: true})
   orderType: string;
 
   @OneToMany(

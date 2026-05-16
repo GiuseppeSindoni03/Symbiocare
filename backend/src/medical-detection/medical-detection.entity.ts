@@ -10,7 +10,7 @@ export class MedicalDetection {
   @Column({ type: 'numeric' })
   value: number;
 
-  @Column()
+  @Column({default: MedicalDetectionType.HR})
   type: MedicalDetectionType;
 
   @ManyToOne(() => Patient, {
