@@ -202,11 +202,10 @@ export class ReservationController {
       throw new UnauthorizedException('User must be a doctor or patient');
     }
 
-    const localDate = moment.tz(date, 'YYYY-MM-DD', 'Europe/Rome').format();
-
+    // Passa la stringa grezza YYYY-MM-DD al service (evita shift timezone)
     const slots = await this.reservationService.getReservationSlots(
       doctor,
-      localDate,
+      date,
       visitType,
     );
 

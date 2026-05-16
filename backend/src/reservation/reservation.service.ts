@@ -461,7 +461,7 @@ export class ReservationService {
 
     const [availabilities, confirmedReservations, visitTypeEntity] =
       await Promise.all([
-        this.getAvailabilitiesOrThrow(doctor.userId, date),
+        this.getAvailabilitiesOrThrow(doctor.userId, dateDto), // passa la stringa pura YYYY-MM-DD
         this.findConfirmedReservations(doctor.userId, date),
         this.findVisitTypeOrThrow(visitType),
       ]);
@@ -596,17 +596,18 @@ export class ReservationService {
       .getOne();
   }
 
-  private async getAvailabilitiesOrThrow(doctorId: string, date: Date) {
+  private async getAvailabilitiesOrThrow(doctorId: string, dateString: string) {
+    // Usa AT TIME ZONE per confrontare la data nel timezone Europe/Rome
+    // e non in UTC, evitando lo shift di -2 ore che farebbe tornare indietro di un giorno
     const availabilities = await this.availabilityRepository
       .createQueryBuilder('a')
       .where('a.doctorUserId = :doctorId', { doctorId: doctorId })
-      .andWhere('DATE(a.startTime) = :date', { date })
+      .andWhere(
+        `DATE(a.startTime AT TIME ZONE 'Europe/Rome') = :date`,
+        { date: dateString },
+      )
       .orderBy('a.startTime')
       .getMany();
-
-    // if (availabilities.length === 0) {
-    //   throw new NotFoundException(`There aren t availability for ${date}`);
-    // }
 
     return availabilities;
   }

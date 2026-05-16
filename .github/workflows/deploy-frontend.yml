@@ -43,7 +43,6 @@ jobs:
         with:
           name: node-app
           path: frontend/dist
-          # NOTA: working-directory è 'frontend', quindi il path relativo è già corretto
 
   deploy:
     runs-on: ubuntu-latest
