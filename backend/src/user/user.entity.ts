@@ -58,4 +58,10 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   twoFactorSecretPending: string | null;
 
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  entraObjectId: string | null;
+
+  @Column({ default: true })
+  profileCompleted: boolean;
+
 }

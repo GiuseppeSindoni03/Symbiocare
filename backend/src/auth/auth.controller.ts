@@ -13,6 +13,8 @@ import {
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { AuthService } from './auth.service';
 import { DoctorRegisterDto } from './dto/doctor-register.dto';
+import { EntraSignInDto } from './dto/entra-signin.dto';
+import { CompleteEntraProfileDto } from './dto/complete-entra-profile.dto';
 
 import { DeviceInfo } from './utils/deviceInfo';
 import { Request, Response } from 'express';
@@ -170,6 +172,58 @@ export class AuthController {
     return result.user;
   }
 
+  /**
+   * Entra ID callback — receives the ID token from the frontend,
+   * validates it, and creates/links the user account.
+   */
+  @UseInterceptors(BaseUserInterceptor)
+  @UseGuards(ThrottlerGuard)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  @Post('/entra/callback')
+  async entraCallback(
+    @Body() entraSignInDto: EntraSignInDto,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.signInWithEntra(
+      entraSignInDto.idToken,
+      this.getDeviceInfo(req),
+    );
+
+    const { accessToken, refreshToken, user, profileCompleted } = result;
+
+    res
+      .cookie('jwt', accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      })
+      .cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      });
+
+    return { user, profileCompleted };
+  }
+
+  /**
+   * Completes the doctor profile for users who signed up via Entra ID.
+   * Requires authentication (user must be logged in via Entra callback first).
+   */
+  @UseInterceptors(BaseUserInterceptor)
+  @Post('/entra/complete-profile')
+  async completeEntraProfile(
+    @GetUser() user: UserItem,
+    @Body() profileData: CompleteEntraProfileDto,
+  ) {
+    const updatedUser = await this.authService.completeEntraProfile(
+      user,
+      profileData,
+    );
+    return { user: updatedUser, profileCompleted: true };
+  }
+
   private getDeviceInfo(req: Request): DeviceInfo {
     return {
       userAgent: req.headers['user-agent'] || 'Unknown',
@@ -179,4 +233,3 @@ export class AuthController {
     };
   }
 }
-

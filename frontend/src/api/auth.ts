@@ -4,6 +4,11 @@ import { RegisterInfo } from "../types/registration-form";
 import { Setup2faResponse } from "../types/setup2fa.response";
 import { User } from "../types/user.interface";
 
+export interface EntraLoginResponse {
+  user: User;
+  profileCompleted: boolean;
+}
+
 interface LoginData {
   email: string;
   password: string;
@@ -98,3 +103,31 @@ export const checkPhoneExists = async (
   console.log("Check phone response:", res);
   return res.data;
 };
+
+/**
+ * Sends the Entra ID token to the backend for validation and login/registration.
+ */
+export async function entraCallback(idToken: string): Promise<EntraLoginResponse> {
+  const res = await api.post<EntraLoginResponse>(
+    "/auth/entra/callback",
+    { idToken },
+    { withCredentials: true }
+  );
+  console.log("Entra callback response:", res.data);
+  return res.data;
+}
+
+/**
+ * Completes the doctor profile for users who signed up via Entra ID.
+ */
+export async function completeEntraProfile(
+  profileData: Record<string, unknown>
+): Promise<{ user: User; profileCompleted: boolean }> {
+  const res = await api.post(
+    "/auth/entra/complete-profile",
+    profileData,
+    { withCredentials: true }
+  );
+  console.log("Complete Entra profile response:", res.data);
+  return res.data;
+}

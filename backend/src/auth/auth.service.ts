@@ -25,8 +25,10 @@ import { addDays, addMinutes } from 'date-fns';
 import { Patient } from 'src/patient/patient.entity';
 import { AuthChallenge } from './auth-challenge.entity';
 import { TwoFactorService } from './two-factor.service';
+import { EntraValidationService } from './entra-validation.service';
 import { v4 as uuid } from 'uuid';
 import * as qrcode from 'qrcode';
+import { Gender } from './dto/gender-enum';
 
 interface AuthResponse {
   accessToken: string;
@@ -58,6 +60,7 @@ export class AuthService {
     private readonly challengeRepository: Repository<AuthChallenge>,
 
     private readonly twoFactorService: TwoFactorService,
+    private readonly entraValidationService: EntraValidationService,
 
     private jwtService: JwtService,
   ) { }
@@ -293,6 +296,145 @@ export class AuthService {
 
     await this.userRepository.save(user);
     return { message: '2FA disabled' };
+  }
+
+  /**
+   * Authenticates a user via Microsoft Entra ID token.
+   * Handles three scenarios:
+   * 1. User already linked by entraObjectId → direct login
+   * 2. User exists with matching email → auto-link entraObjectId + login
+   * 3. No user found → create new user with Entra profile + login
+   */
+  async signInWithEntra(
+    idToken: string,
+    deviceInfo: DeviceInfo,
+  ): Promise<AuthResponse & { profileCompleted: boolean }> {
+    // Validate the Entra ID token and extract claims
+    const entraPayload =
+      await this.entraValidationService.validateToken(idToken);
+
+    // 1. Check if user is already linked by Entra Object ID
+    let user = await this.userRepository.findOne({
+      where: { entraObjectId: entraPayload.oid },
+    });
+
+    if (!user) {
+      // 2. Check if a user exists with the same email (auto-linking)
+      user = await this.userRepository.findOne({
+        where: { email: entraPayload.email },
+      });
+
+      if (user) {
+        // Link the Entra account to the existing user
+        user.entraObjectId = entraPayload.oid;
+        await this.userRepository.save(user);
+        console.log(
+          `Linked Entra account ${entraPayload.oid} to existing user ${user.email}`,
+        );
+      }
+    }
+
+    if (!user) {
+      // 3. New user — create account with Entra profile data
+      user = await this.createUserFromEntra(entraPayload);
+      console.log(
+        `Created new user from Entra: ${user.email} (${entraPayload.oid})`,
+      );
+    }
+
+    // Complete login flow (same as traditional login)
+    const loginResult = await this.completeLogin(user, deviceInfo);
+
+    return {
+      ...loginResult,
+      profileCompleted: user.profileCompleted,
+    };
+  }
+
+  /**
+   * Completes the doctor profile for a user who signed up via Entra ID.
+   */
+  async completeEntraProfile(
+    user: User,
+    profileData: {
+      cf: string;
+      birthDate: Date;
+      phone: string;
+      gender: Gender;
+      address: string;
+      city: string;
+      cap: string;
+      province: string;
+      medicalOffice: string;
+      registrationNumber: string;
+      orderProvince: string;
+      orderDate: Date;
+      orderType: string;
+      specialization: string;
+    },
+  ): Promise<UserItem> {
+    // Update user with personal data
+    user.cf = profileData.cf;
+    user.birthDate = profileData.birthDate;
+    user.phone = profileData.phone;
+    user.gender = profileData.gender;
+    user.address = profileData.address;
+    user.city = profileData.city;
+    user.cap = profileData.cap;
+    user.province = profileData.province;
+    user.profileCompleted = true;
+
+    await this.userRepository.save(user);
+
+    // Create doctor info
+    const doctor = this.doctorRepository.create({
+      medicalOffice: profileData.medicalOffice,
+      registrationNumber: profileData.registrationNumber,
+      orderProvince: profileData.orderProvince,
+      orderDate: profileData.orderDate,
+      orderType: profileData.orderType,
+      specialization: profileData.specialization,
+      user: user,
+    });
+
+    await this.doctorRepository.save(doctor);
+
+    const finalUser: UserItem = user;
+    finalUser.doctor = doctor;
+
+    return finalUser;
+  }
+
+  /**
+   * Creates a new user from Entra ID claims.
+   * The profile is marked as incomplete — the doctor must fill in medical details.
+   */
+  private async createUserFromEntra(entraPayload: {
+    oid: string;
+    email: string;
+    given_name?: string;
+    family_name?: string;
+    name: string;
+  }): Promise<User> {
+    const user = this.userRepository.create({
+      email: entraPayload.email,
+      password: '', // No password — Entra-only authentication
+      name: entraPayload.given_name || entraPayload.name.split(' ')[0] || 'N/A',
+      surname: entraPayload.family_name || entraPayload.name.split(' ').slice(1).join(' ') || 'N/A',
+      cf: '', // Will be filled in profile completion
+      birthDate: new Date('1900-01-01'), // Placeholder
+      phone: '', // Will be filled in profile completion
+      gender: Gender.Altro,
+      address: '', // Will be filled in profile completion
+      city: '',
+      cap: '',
+      province: '',
+      role: UserRoles.DOCTOR,
+      entraObjectId: entraPayload.oid,
+      profileCompleted: false,
+    });
+
+    return this.userRepository.save(user);
   }
 
   async refreshToken(refreshToken: string): Promise<string> {

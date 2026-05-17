@@ -23,6 +23,7 @@ import AddMedicalExamination from "./pages/AddMedicalExaminationPage";
 import { TwoFAPage } from "./pages/2faPage";
 import { SettingsPage } from "./pages/settingsPage";
 import { TwoFactorAuthSettings } from "./components/auth2faSettings";
+import CompleteEntraProfilePage from "./pages/CompleteEntraProfilePage";
 
 function ThemedToastContainer() {
   const { colorScheme } = useTheme();
@@ -91,6 +92,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="auth/2fa" element={<TwoFAPage />} />
+            <Route path="/entra/complete-profile" element={<CompleteEntraProfilePage />} />
 
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

@@ -11,6 +11,7 @@ import { Patient } from 'src/patient/patient.entity';
 
 import { AuthChallenge } from './auth-challenge.entity';
 import { TwoFactorService } from './two-factor.service';
+import { EntraValidationService } from './entra-validation.service';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { TwoFactorService } from './two-factor.service';
   providers: [
     AuthService,
     TwoFactorService,
+    EntraValidationService,
     //JwtStrategy
   ],
   controllers: [AuthController],

@@ -70,7 +70,7 @@ export class AppModule {
         { path: 'auth/signup', method: RequestMethod.POST },
         { path: 'auth/signin', method: RequestMethod.POST },
         { path: 'auth/2fa/verify', method: RequestMethod.POST },
-
+        { path: 'auth/entra/callback', method: RequestMethod.POST },
       )
       .forRoutes('*');
   }

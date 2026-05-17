@@ -1,4 +1,5 @@
 import { useLoginMutation } from "../hooks/use-login-mutation";
+import { useEntraLoginMutation } from "../hooks/use-entra-login-mutation";
 import { useUser } from "../context/UserContext";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
@@ -14,6 +15,7 @@ import { loginSchema } from "../types/validation/login/login.schema";
 
 export default function LoginPage() {
   const mutation = useLoginMutation();
+  const entraMutation = useEntraLoginMutation();
   const { isAuthenticated } = useUser();
   const navigate = useNavigate();
 
@@ -133,6 +135,40 @@ export default function LoginPage() {
                 </button>
               </div>
             </form>
+
+            {/* Divider */}
+            <div className={styles.divider}>
+              <span className={styles.dividerText}>oppure</span>
+            </div>
+
+            {/* Microsoft Entra ID Login Button */}
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnMicrosoft}`}
+              onClick={() => entraMutation.mutate()}
+              disabled={entraMutation.isPending}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.75rem",
+                height: "48px",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 21 21"
+              >
+                <rect x="1" y="1" width="9" height="9" fill="#f25022" />
+                <rect x="1" y="11" width="9" height="9" fill="#00a4ef" />
+                <rect x="11" y="1" width="9" height="9" fill="#7fba00" />
+                <rect x="11" y="11" width="9" height="9" fill="#ffb900" />
+              </svg>
+              {entraMutation.isPending ? "Accesso in corso..." : "Accedi con Microsoft"}
+            </button>
+
             {/* <Divider label="o" p/> */}
             <div className={styles.navSection}>
               <p className={styles.navText}>Non hai un account? </p>
@@ -150,3 +186,4 @@ export default function LoginPage() {
     </>
   );
 }
+

@@ -206,6 +206,54 @@
   font-size: 0.875rem;
 }
 
+/* Microsoft Entra ID button */
+.btnMicrosoft {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btnMicrosoft:hover:not(:disabled) {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px);
+}
+
+.btnMicrosoft:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Divider "oppure" */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  gap: 1rem;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.dividerText {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
 /* Responsive design */
 @media (max-width: 480px) {
   .glassCard {

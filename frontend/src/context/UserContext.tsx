@@ -12,10 +12,13 @@ import {
   logout as logoutFunction,
   register as registerFunction,
   verify2FA,
+  entraCallback,
 } from "../api/auth";
 import { fetchUserMe } from "../api/user";
 import { RegisterInfo } from "../types/registration-form";
 import { LoginResponse } from "../types/loginResponse";
+import { useMsal } from "@azure/msal-react";
+import { loginRequest } from "../config/msalConfig";
 
 interface UserContextType {
   user: User | null;
@@ -26,6 +29,7 @@ interface UserContextType {
   logout: () => Promise<void>;
   register: (data: RegisterInfo) => Promise<User>;
   twoFactorAuthenticate: (challengeId: string, code: string) => Promise<User>;
+  loginWithEntra: () => Promise<{ profileCompleted: boolean }>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -33,6 +37,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { instance } = useMsal();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -77,6 +82,26 @@ export function UserProvider({ children }: { children: ReactNode }) {
     return response;
   };
 
+  /**
+   * Initiates Microsoft Entra ID login via MSAL popup.
+   * Sends the ID token to the backend for validation and user creation/linking.
+   * Returns whether the user's profile is complete.
+   */
+  const loginWithEntra = async (): Promise<{ profileCompleted: boolean }> => {
+    // Open Microsoft login popup
+    const msalResult = await instance.loginPopup(loginRequest);
+
+    if (!msalResult.idToken) {
+      throw new Error("No ID token received from Microsoft");
+    }
+
+    // Send the ID token to our backend
+    const response = await entraCallback(msalResult.idToken);
+
+    setUser(response.user);
+    return { profileCompleted: response.profileCompleted };
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -87,7 +112,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
         login,
         logout,
         register,
-        twoFactorAuthenticate
+        twoFactorAuthenticate,
+        loginWithEntra,
       }}
     >
       {children}
@@ -102,3 +128,4 @@ export function useUser() {
   }
   return context;
 }
+
