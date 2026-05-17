@@ -11,15 +11,17 @@ import "./styles/global.css";
 const queryClient = new QueryClient();
 const msalInstance = new PublicClientApplication(msalConfig);
 
-createRoot(document.getElementById("root")!).render(
-  // <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <MsalProvider instance={msalInstance}>
-        <UserProvider>
-          <App />
-        </UserProvider>
-      </MsalProvider>
-    </QueryClientProvider>
-  // </StrictMode>
-);
+msalInstance.initialize().then(() => {
+  createRoot(document.getElementById("root")!).render(
+    // <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <MsalProvider instance={msalInstance}>
+          <UserProvider>
+            <App />
+          </UserProvider>
+        </MsalProvider>
+      </QueryClientProvider>
+    // </StrictMode>
+  );
+});
 
