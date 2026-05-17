@@ -34,39 +34,47 @@ export class UserService {
     }
 
     if (user.role === UserRoles.PATIENT) {
+      const patient = await this.buildPatientItem(userId, user);
       return {
         ...user,
-        patient: await this.buildPatientItem(userId, user),
+        patient,
         doctor: undefined,
       };
     }
 
+    const doctor = await this.buildDoctorItem(userId, user);
     return {
       ...user,
       patient: undefined,
-      doctor: await this.buildDoctorItem(userId, user),
+      doctor,
     };
   }
 
-  private async buildPatientItem(userId: string, user: User): Promise<Patient> {
+  private async buildPatientItem(userId: string, user: User): Promise<Patient | undefined> {
     const patient = await this.patientRepository.findOne({
       where: { user: { id: userId } },
     });
 
     if (!patient) {
-      throw new UnauthorizedException('Patient record not found');
+      if (user.profileCompleted) {
+        throw new UnauthorizedException('Patient record not found');
+      }
+      return undefined;
     }
 
     return patient;
   }
 
-  private async buildDoctorItem(userId: string, user: User): Promise<Doctor> {
+  private async buildDoctorItem(userId: string, user: User): Promise<Doctor | undefined> {
     const doctor = await this.doctorRepository.findOne({
       where: { userId: userId },
     });
 
     if (!doctor) {
-      throw new UnauthorizedException('Doctor record not found');
+      if (user.profileCompleted) {
+        throw new UnauthorizedException('Doctor record not found');
+      }
+      return undefined;
     }
 
     return doctor;

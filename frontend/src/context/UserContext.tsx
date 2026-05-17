@@ -97,7 +97,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
           if (response.idToken) {
             return entraCallback(response.idToken).then((res) => {
               setUser(res.user);
-              if (!res.profileCompleted) {
+              if (!res.profileCompleted && window.location.pathname !== "/entra/complete-profile") {
                 // Reindirizza forzatamente al completamento profilo
                 window.location.href = "/entra/complete-profile";
               }
