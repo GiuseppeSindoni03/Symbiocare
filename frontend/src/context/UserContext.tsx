@@ -82,29 +82,33 @@ export function UserProvider({ children }: { children: ReactNode }) {
     return response;
   };
 
+  const { accounts, inProgress } = useMsal();
+
+  // Se l'utente ha completato il login Microsoft (ha un account attivo in MSAL)
+  // ma non abbiamo ancora il nostro 'user' locale, sincronizziamo!
   useEffect(() => {
-    // Gestisce il ritorno dal loginRedirect di Microsoft
-    const callbackId = instance.addEventCallback((event) => {
-      if (event.eventType === "msal:loginSuccess" && event.payload) {
-        const payload = event.payload as any;
-        if (payload.idToken) {
-          entraCallback(payload.idToken)
-            .then((res) => {
+    if (inProgress === "none" && accounts.length > 0 && !user) {
+      instance
+        .acquireTokenSilent({
+          ...loginRequest,
+          account: accounts[0],
+        })
+        .then((response) => {
+          if (response.idToken) {
+            return entraCallback(response.idToken).then((res) => {
               setUser(res.user);
               if (!res.profileCompleted) {
                 // Reindirizza forzatamente al completamento profilo
                 window.location.href = "/entra/complete-profile";
               }
-            })
-            .catch((err) => console.error("Errore validazione backend Entra:", err));
-        }
-      }
-    });
-
-    return () => {
-      if (callbackId) instance.removeEventCallback(callbackId);
-    };
-  }, [instance]);
+            });
+          }
+        })
+        .catch((err) => {
+          console.error("Errore sincronizzazione token Entra:", err);
+        });
+    }
+  }, [inProgress, accounts, instance, user]);
 
   /**
    * Initiates Microsoft Entra ID login via MSAL redirect.
