@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-SymbioCare backend is built with **NestJS** and provides a set of REST APIs to manage patient health data, doctor appointments, and secure authentication. This backend is the core of the **SymbioCare** platform, enabling communication between the web and mobile frontend applications and various medical devices.
+SymbioCare backend is built with **NestJS** and provides a set of REST APIs to manage patient health data, doctor appointments, and secure authentication. This backend is the core of the **SymbioCare** platform, enabling communication between the web and mobile frontend applications and various medical devices..
 
 ## Technologies Used
 
