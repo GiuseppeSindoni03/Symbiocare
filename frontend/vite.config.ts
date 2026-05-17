@@ -7,5 +7,8 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@tabler/icons-react"],
   },
+  server: {
+    port: 4200,
+  },
   //swc
 });

@@ -82,24 +82,41 @@ export function UserProvider({ children }: { children: ReactNode }) {
     return response;
   };
 
+  useEffect(() => {
+    // Gestisce il ritorno dal loginRedirect di Microsoft
+    const callbackId = instance.addEventCallback((event) => {
+      if (event.eventType === "msal:loginSuccess" && event.payload) {
+        const payload = event.payload as any;
+        if (payload.idToken) {
+          entraCallback(payload.idToken)
+            .then((res) => {
+              setUser(res.user);
+              if (!res.profileCompleted) {
+                // Reindirizza forzatamente al completamento profilo
+                window.location.href = "/entra/complete-profile";
+              }
+            })
+            .catch((err) => console.error("Errore validazione backend Entra:", err));
+        }
+      }
+    });
+
+    return () => {
+      if (callbackId) instance.removeEventCallback(callbackId);
+    };
+  }, [instance]);
+
   /**
-   * Initiates Microsoft Entra ID login via MSAL popup.
+   * Initiates Microsoft Entra ID login via MSAL redirect.
    * Sends the ID token to the backend for validation and user creation/linking.
-   * Returns whether the user's profile is complete.
    */
   const loginWithEntra = async (): Promise<{ profileCompleted: boolean }> => {
-    // Open Microsoft login popup
-    const msalResult = await instance.loginPopup(loginRequest);
-
-    if (!msalResult.idToken) {
-      throw new Error("No ID token received from Microsoft");
-    }
-
-    // Send the ID token to our backend
-    const response = await entraCallback(msalResult.idToken);
-
-    setUser(response.user);
-    return { profileCompleted: response.profileCompleted };
+    // Usiamo loginRedirect invece di loginPopup per evitare tutti i problemi di blocco finestre
+    await instance.loginRedirect(loginRequest);
+    
+    // Essendo un redirect, la pagina si ricaricherà. Ritorniamo una promise infinita
+    // così il mutation loading state rimane attivo finché la pagina non scompare.
+    return new Promise(() => {});
   };
 
   return (

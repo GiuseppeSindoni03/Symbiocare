@@ -16,7 +16,7 @@ export const msalConfig: Configuration = {
       import.meta.env.VITE_ENTRA_AUTHORITY ||
       "https://login.microsoftonline.com/common",
     redirectUri:
-      import.meta.env.VITE_ENTRA_REDIRECT_URI || `${window.location.origin}/blank.html`,
+      import.meta.env.VITE_ENTRA_REDIRECT_URI || window.location.origin,
     postLogoutRedirectUri: window.location.origin,
   },
   cache: {
