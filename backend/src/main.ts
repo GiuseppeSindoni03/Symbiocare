@@ -3,6 +3,22 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { ClassSerializerInterceptor, Logger } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import * as appInsights from 'applicationinsights';
+
+// Inizializza Application Insights prima del bootstrap dell'app
+if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
+  appInsights.setup(process.env.APPLICATIONINSIGHTS_CONNECTION_STRING)
+    .setAutoDependencyCorrelation(true)
+    .setAutoCollectRequests(true)
+    .setAutoCollectPerformance(true, true)
+    .setAutoCollectExceptions(true)
+    .setAutoCollectDependencies(true)
+    .setAutoCollectConsole(true, true)
+    .setUseDiskRetryCaching(true)
+    .setSendLiveMetrics(true)
+    .setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C)
+    .start();
+}
 
 async function bootstrap() {
   const logger = new Logger();

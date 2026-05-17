@@ -14,6 +14,7 @@ import { MedicalDetectionModule } from './medical-detection/medical-detection.mo
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
 import { NotificationModule } from './notification/notification.module';
+import { MonitoringModule } from './monitoring/monitoring.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { NotificationModule } from './notification/notification.module';
     ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
     ScheduleModule.forRoot(),
     NotificationModule,
+    MonitoringModule,
   ],
   controllers: [],
 })
