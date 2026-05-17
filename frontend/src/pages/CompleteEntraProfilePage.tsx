@@ -32,6 +32,11 @@ export default function CompleteEntraProfilePage() {
 
   const form = useForm({
     initialValues: {
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
       cf: "",
       birthDate: "",
       phone: "",
