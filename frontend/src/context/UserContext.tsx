@@ -73,6 +73,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     await logoutFunction();
     setUser(null);
+    
+    // Se c'è un account Entra ID attivo in MSAL, disconnettilo per evitare il re-login automatico
+    if (accounts.length > 0) {
+      await instance.logoutRedirect({
+        postLogoutRedirectUri: window.location.origin + "/login",
+      });
+    }
   };
 
 
