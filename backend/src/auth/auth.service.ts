@@ -162,20 +162,24 @@ export class AuthService {
     let finalUser: UserItem = user;
     if (user.role === UserRoles.DOCTOR) {
       const doctor = await this.doctorRepository.findOne({
-        where: { userId: user.id },
+        where: { user: { id: user.id } }, // Fixing relation query just in case
       });
 
-      if (!doctor) throw new NotFoundException("Doctor's info not found");
+      if (!doctor && user.profileCompleted) {
+        throw new NotFoundException("Doctor's info not found");
+      }
 
-      finalUser.doctor = doctor;
+      if (doctor) finalUser.doctor = doctor;
     } else {
       const patient = await this.patientRepository.findOne({
-        where: { user: user },
+        where: { user: { id: user.id } },
       });
 
-      if (!patient) throw new NotFoundException("Patient's info not found");
+      if (!patient && user.profileCompleted) {
+        throw new NotFoundException("Patient's info not found");
+      }
 
-      finalUser.patient = patient;
+      if (patient) finalUser.patient = patient;
     }
 
     const session = await this.createSession(user, deviceInfo);
