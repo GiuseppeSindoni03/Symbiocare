@@ -52,8 +52,8 @@ export class AuthMiddleware implements NestMiddleware {
 
       res.cookie('jwt', accessToken, {
         httpOnly: true,
-        // secure: true,
-        sameSite: 'lax',
+        secure: true,
+        sameSite: 'none',
       });
 
       return next();
@@ -71,8 +71,8 @@ export class AuthMiddleware implements NestMiddleware {
 
           res.cookie('jwt', newAccessToken, {
             httpOnly: true,
-            // secure: true,
-            sameSite: 'lax',
+            secure: true,
+            sameSite: 'none',
           });
 
           req.user = await this.fetchUser(decoded.sessionId);
