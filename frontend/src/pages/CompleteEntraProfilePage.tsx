@@ -55,7 +55,7 @@ export default function CompleteEntraProfilePage() {
   });
 
   const mutation = useMutation({
-    mutationFn: (data: typeof form.values) => completeEntraProfile(data),
+    mutationFn: (data: Record<string, unknown>) => completeEntraProfile(data),
     onSuccess: (result) => {
       setUser(result.user);
       toast.success("Profilo completato con successo!");
@@ -134,7 +134,8 @@ export default function CompleteEntraProfilePage() {
 
   const handleSubmit = async (values: typeof form.values) => {
     if (!(await handleValidation())) return;
-    mutation.mutate(values);
+    const { name, surname, email, password, confirmPassword, ...filteredData } = values;
+    mutation.mutate(filteredData);
   };
 
   const shouldAllowSelectStep = (step: number) =>

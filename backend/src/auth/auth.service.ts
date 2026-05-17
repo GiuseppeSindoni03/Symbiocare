@@ -29,6 +29,7 @@ import { EntraValidationService } from './entra-validation.service';
 import { v4 as uuid } from 'uuid';
 import * as qrcode from 'qrcode';
 import { Gender } from './dto/gender-enum';
+import { log } from 'console';
 
 interface AuthResponse {
   accessToken: string;
@@ -469,6 +470,8 @@ export class AuthService {
   }
 
   async logout(refreshToken: string): Promise<void> {
+
+    log('Logout request received with refresh token:', refreshToken);
     const payload = this.verifyToken(refreshToken);
 
     const session = await this.sessionRepository.findOne({

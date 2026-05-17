@@ -59,9 +59,9 @@ export default function RegisterPage() {
     }
   };
 
-  function handleSubmit(values: typeof form.values) {
+  async function handleSubmit(values: typeof form.values) {
     console.log("ciao");
-    if (!handleValidation()) return;
+    if (!(await handleValidation())) return;
 
     console.log("Dati registrazione:", values);
     // Fai la POST o la mutation qui
@@ -112,11 +112,12 @@ export default function RegisterPage() {
     }
 
     if (nextStep > active) {
-      if (!handleValidation()) {
+      const isValid = await handleValidation();
+      if (!isValid) {
         console.log("Validazione fallita");
         return;
       }
-    } else setActive(active - 1);
+    }
 
     setActive(nextStep);
     setHighestStepVisited((hSC) => Math.max(hSC, nextStep));
